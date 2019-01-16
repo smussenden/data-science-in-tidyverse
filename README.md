@@ -1,10 +1,17 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 # Exploring the tidyverse
 
-This is the repo for *"Exploring the tidyverse"* taught at [NICAR](https://www.ire.org/conferences/nicar18/hands-on-training/) in March 2018.
+This is the repo for *"Exploring the tidyverse"* taught at [NICAR](https://www.ire.org/conferences/nicar-2019/)'s 2019 confernce in Orange County, California.
 
 This is a one-day hands-on workshop based on the book [R for Data Science](http://r4ds.had.co.nz/). This workshop is designed for people who are familiar with R and want to learn how to achieve their data analysis goals the "tidy" way. You will learn how to visualize, transform, and model data in R and work with date-times, character strings, and untidy data formats. Along the way, you will learn and use many packages from the tidyverse including ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, lubridate, and forcats.
 
-(There are two days worth of content here, I'll figure out what figure out what half to cover after talking to you all)
+(While the original material contained two days' worth of content, this repository is a slimmed-down version designed to fit into the one-day NICAR 2019 workshop. It also contains some additional changes to the original modules to tailor them to the NICAR 2019 workshop.)
+
+NOTE: This modified repository is currently a work in progress, prior to NICAR 2019.
 
 ## Software requirements
 
@@ -17,7 +24,7 @@ install.packages(c("tidyverse", "fivethirtyeight", "gapminder", "rmarkdown", "us
 Then you can grab a local copy of all the slides, code, data, and cheatsheets with:
 
 ```R
-usethis::use_course("http://bit.ly/2Frcaia")
+usethis::use_course("BITLYLINK")
 ```
 
 To get back to this project later, double-click on "data-science-in-the-tidyverse.Rproj".
@@ -30,4 +37,4 @@ To get back to this project later, double-click on "data-science-in-the-tidyvers
 
 ## Acknowledgements
 
-I have forked this repo from [Charlotte Wickham](https://github.com/cwickham/data-science-in-tidyverse), who forked it from [RStudio](https://github.com/rstudio/master-the-tidyverse). Thanks to [Charlotte](http://cwick.co.nz) and [Garrett](https://github.com/garrettgman) for creating the slides and accompanying materials!
+I have forked this repo from [Hadley Wickham](https://github.com/hadley/data-science-in-tidyverse) based on his session at NICAR 2018, who in turn forked it from [Charlotte Wickham](https://github.com/cwickham/data-science-in-tidyverse), who forked it from [RStudio](https://github.com/rstudio/master-the-tidyverse). Thanks to [Charlotte](http://cwick.co.nz) and [Garrett](https://github.com/garrettgman) for creating the slides and accompanying materials.
