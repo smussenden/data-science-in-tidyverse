@@ -9,7 +9,7 @@ This is the repo for *"Exploring the tidyverse"* taught at [NICAR](https://www.i
 
 This is a one-day hands-on workshop based on the book [R for Data Science](http://r4ds.had.co.nz/). This workshop is designed for people who are familiar with R and want to learn how to achieve their data analysis goals the "tidy" way. You will learn how to visualize, transform, and model data in R and work with date-times, character strings, and untidy data formats. Along the way, you will learn and use many packages from the tidyverse including ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, lubridate, and forcats.
 
-(While the original material contained two days' worth of content, this repository is a slimmed-down version designed to fit into the one-day NICAR 2019 workshop. It also contains some additional changes to the original modules to tailor them to the NICAR 2019 workshop.)
+(While the original material contained two days' worth of content, this repository is a slimmed-down version designed to fit into the one-day NICAR 2019 workshop. It also contains some changes to the original modules to tailor them to the NICAR 2019 workshop, including adding new training data and materials taken from Andrew Tran's [R for Journalists](https://learn.r-journalism.com/en/) and my own custom materials.
 
 NOTE: This modified repository is currently a work in progress, prior to NICAR 2019.
 
