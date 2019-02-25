@@ -306,6 +306,39 @@ events %>%
   count(cand_fullname, state) %>% 
   arrange(state, desc(n))
 
+# what about the most frequent types of events
+events %>% 
+  count(event_type) %>% 
+  arrange(desc(n))
+
+# here we're seeing some potentially dirty data that needs cleaning.
+# the event types seem to be inconsistently entered.
+# how might we standardize them? let's take a look.
+
+# A function that returns a vector the same length as the input is called **vectorized**.
+# * ifelse()
+
+# let's see ifelse() in action
+events %>% 
+  mutate(new_type = ifelse(event_type == "event speech", "TEST", event_type)) %>% 
+  View()
+
+# ok now let's clean a few columns for real
+events %>% 
+  mutate(new_type = ifelse(event_type == "campaign event", "event", event_type),
+         new_type = ifelse(event_type == "campaign events", "event", new_type),
+         new_type = ifelse(event_type == "event speech", "speech", new_type)) %>% 
+  View()
+
+# this can start to get a little tedious though...  so enter **case_when()**
+events %>%
+  mutate(new_type = case_when(
+            event_type == "campaign event" ~ "event",
+            event_type == "campaign events" ~ "event",
+            event_type == "event speech" ~ "speech",
+            event_type == TRUE ~ "other"
+      ))
+
 
 
 
@@ -323,108 +356,22 @@ events %>%
 
 
 
-
-## Quiz 
-
-A function that returns a vector the same length as the input is called **vectorized**.
-
-Which of the following functions are vectorized?
-
-  * `ifelse()`
-  * `diff()`
-  * `sum()`
-
-You might try these:
-```{r}
-gapminder %>% 
-  mutate(size = ifelse(pop < 10e06, "small", "large"))
-```
-
-```{r, error = TRUE}
-gapminder %>% 
-  mutate(diff_pop = diff(pop))
-```
-
-```{r}
-gapminder %>% 
-  mutate(total_pop = sum(as.numeric(pop)))
-```
-
-## Your Turn 5
-
-Alter the code to add a `prev_lifeExp` column that contains the life expectancy from the previous record.
-
-(Hint: use cheatsheet, you want to offset elements by one)
-
-**Challenge**: Why isn't this quite the 'life expectency five years ago'?
-
-```{r}
-gapminder %>%
-  mutate()
-```
-
-## Your Turn 6
-
-Use summarise() to compute three statistics about the data:
-
-* The first (minimum) year in the dataset
-* The last (maximum) year in the dataset
-* The number of countries represented in the data (Hint: use cheatsheet)
-
-```{r}
-gapminder 
-```
-
-## Your Turn 7
-
-Extract the rows where `continent == "Africa"` and `year == 2007`. 
-
-Then use summarise() and summary functions to find:
-
-1. The number of unique countries
-2. The median life expectancy
-
-```{r}
-gapminder 
-```
-
-## Your Turn 8
-
-Find the median life expectancy by continent in 2007.
-
-```{r}
-gapminder %>%
-  filter(year == 2007)
-```
-
-## Your Turn 9
-
-Brainstorm with your neighbor the sequence of operations to find the country with biggest jump in life expectancy (between any two consecutive records) for each continent.
-
-## Your Turn 10
-
-Find the country with biggest jump in life expectancy (between any two consecutive records) for each continent.
-
-```{r}
-
-
-```
-
-## Your Turn 11
-
-Use `left_join()` to add the country codes in `country_codes` to the gapminder data.
-
-```{r}
-country_codes
-```
-
-**Challenge**: Which codes in country_codes have no matches in gapminder?
-
-```{r}
-
-```
-
-
-***
+# 
+# ## Your Turn 11
+# 
+# Use `left_join()` to add the country codes in `country_codes` to the gapminder data.
+# 
+# ```{r}
+# country_codes
+# ```
+# 
+# **Challenge**: Which codes in country_codes have no matches in gapminder?
+# 
+# ```{r}
+# 
+# ```
+# 
+# 
+# ***
 
 
