@@ -80,7 +80,6 @@ data %>%
 
 ## subset strings
 # `str_sub(strings, start, end)` extracts and replaces substrings
-
 x <- "Dr. James"
 
 str_sub(x, 1, 3)
@@ -89,124 +88,78 @@ str_sub(x, 1, 3) <- "Mr."
 x
 
 
-Negative numbers count from the right.
-
-```{r str_sub3}
+# Negative numbers count from the right.
 x <- "baby"
 str_sub(x, -3, -1)
+
 str_sub(x, -1, -1) <- "ies"
-```
+x
 
 
-## detect matches
+## change case
+# `str_to_upper(strings)` is upper case
+# `str_to_lower(strings)` is lower case
+# `str_to_title(strings)` is title case
+x <- c("john smith", "Mary Todd", "BILL HOLLIS")
 
-`str_detect(strings, pattern)` returns T/F
+str_to_upper(x)
+str_to_lower(x)
+str_to_title(x)
 
-```{r str_detect1}
+
+## trim strings
+# `str_trim(strings)` remove white space at the beginning and end of string
+x <- c(" Assault", "Burglary ", " Kidnapping ")
+
+str_trim(x)
+
+
+## detect matches 
+# `str_detect(strings, pattern)` returns T/F
 x <- c("Bill", "Bob", "David.Williams")
 x
+
 str_detect(x, "il")
-```
+
 
 ## count matches
-
-`str_count(strings, pattern)` count number of matches in a string
-
-```{r str_count}
+# `str_count(strings, pattern)` count number of matches in a string
 x <- c("Assault/Robbery/Kidnapping")
 x
+
 str_count(x, "/")
 
 # How many offenses
 str_count(x, "/") + 1
-```
 
-## extract matches
 
-```{r str_extract}
+## extract matches - this uses regular expressions
 x <- c("bsmith@microsoft.com", "jdoe@google.com", "jfwilliams@google.com")
+
 str_extract(x, "@.+\\.com$")
-```
+
 
 ## split strings
-
-`str_split(string, pattern)` split a string into pieces
-
-```{r str_split}
+# `str_split(string, pattern)` split a string into pieces
 x <- c("john smith", "mary todd", "bill holis")
 
 str_split(x, " ", simplify=TRUE)
 
 first <- str_split(x, " ", simplify=TRUE)[,1]
 last  <- str_split(x, " ", simplify=TRUE)[,2]
-```
 
 
 ## replace a pattern
-
-`str_replace(strings, pattern, replacement)` replace a pattern in a string with another string
-
-```{r str_replace}
+# `str_replace(strings, pattern, replacement)` replace a pattern in a string with another string
 x <- c("john smith", "mary todd", "bill holis")
+
 str_replace(x, "[aeiou]", "-")
 
 str_replace_all(x, "[aeiou]", "-")
-```
-
-## change case
-
-`str_to_upper(strings)` is upper case
-`str_to_lower(strings)` is lower case
-`str_to_title(strings)` is title case
-
-```{r x_case}
-x <- c("john smith", "Mary Todd", "BILL HOLLIS")
-
-str_to_upper(x)
-str_to_lower(x)
-str_to_title(x)
-```
-
-## trim strings
-
-`str_trim(strings)` remove white space at the beginning and end of string
-
-```{r str_trim}
-x <- c(" Assault", "Burglary ", " Kidnapping ")
-str_trim(x)
-```
 
 
+### APPLYING THESE TO OUR DATA ####
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# this can start to get a little tedious though...  so enter **case_when()**
 events %>%
   mutate(new_type = case_when(
             event_type == "campaign event" ~ "event",
@@ -215,23 +168,16 @@ events %>%
             event_type == TRUE ~ "other"
       ))
 
-# Of course, you may be asking: wouldn't it be nice if we could standardize...
-# ...based on certain keywords or patterns?  Instead of spelling out every variation.
 
-# The answer is yes. Thanks to "string functions"...!
-
-# We'll show a quick example of what that looks like, and then start from the beginning in the next module.
-# 
 events %>%
   mutate(new_type = case_when(
     str_detect(event_type, "event") ~ "event")
   )
 
 
-# We'll take a closer look at string functions now using the stringr package.
 
-# First, are there questions? Let's discuss.
 
+#### JOINING DATA ####
 
 
 
