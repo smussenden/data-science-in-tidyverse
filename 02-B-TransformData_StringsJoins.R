@@ -158,22 +158,35 @@ str_replace(x, "[aeiou]", "-")
 str_replace_all(x, "[aeiou]", "-")
 
 
-### APPLYING THESE TO OUR DATA ####
+#### BACK TO OUR CAMPAIGN DATA ####
 
+# see the table again
+events
+
+# now let's use string functions to standardize a few event types
 events %>%
+  select(event_type) %>% 
   mutate(new_type = case_when(
-            event_type == "campaign event" ~ "event",
-            event_type == "campaign events" ~ "event",
-            event_type == "event speech" ~ "speech",
-            event_type == TRUE ~ "other"
-      ))
+    str_detect(event_type, "speech") ~ "speech")
+  ) %>% 
+  View()
 
 
+# could there be a problem here
+# multiples?
 events %>%
+  select(event_type) %>% 
   mutate(new_type = case_when(
-    str_detect(event_type, "event") ~ "event")
-  )
+    str_detect(event_type, ",") ~ "multiple",
+    str_detect(event_type, "speech") ~ "speech",
+    str_detect(event_type, "event") ~ "unspecified event",
+    str_detect(event_type, "forum") ~ "town hall",
+    str_detect(event_type, "town hall") ~ "town hall"
+    )
+  ) %>% 
+  View()
 
+# notice that in the example above, the search for comma comes first, not last...
 
 
 
@@ -181,28 +194,5 @@ events %>%
 
 
 
-
-
-
-
-
-
-# 
-# ## Your Turn 11
-# 
-# Use `left_join()` to add the country codes in `country_codes` to the gapminder data.
-# 
-# ```{r}
-# country_codes
-# ```
-# 
-# **Challenge**: Which codes in country_codes have no matches in gapminder?
-# 
-# ```{r}
-# 
-# ```
-# 
-# 
-# ***
 
 
