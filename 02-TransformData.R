@@ -1,19 +1,20 @@
-# TRANSFORMING DATA
+#**** TRANSFORMING DATA ****#
 
-library(tidyverse)
-
-
-# Takeaways we'll discuss
+# Takeaways we'll discuss today
   
-# * Extract cases with `filter()`  
+# * Filter rows basedon certain criteria with `filter()`  
 # * Make new variables, with `mutate()`  
 # * Make tables of summaries with `summarise()`  
 # * Do groupwise operations with `group_by()`
 # * Connect operations with `%>%`  
-# * Joins are two table verbs  
+# * Join tables together using 'inner_join()' and 'left_join()'  
+
+
+#load the packages we'll need
+library(tidyverse)
   
   
-# Toy dataset to use
+# Toy dataset to use created manually with tribble function (for creating tibbles)
 pollution <- tribble(
        ~city,   ~size, ~amount, 
   "New York", "large",      23,
@@ -24,60 +25,105 @@ pollution <- tribble(
    "Beijing", "small",      56
 )
 
+#What are "tibbles"...?
+#They're dataframes, with some additional tidyverse-infused features
+#Returns more readable output in the console
 
-```
+#let's see the data we just created, you'll see how a tibble view differs in the console
+pollution
 
-All data for countries in Oceania
-```{r}
-filter(gapminder)
-```
+#since there are only a handful of rows, a bit harder to see - let's try the built-in IRIS data
+iris
+#can limit rows with head()
+head(iris)
+#let's see how tibbles differ in their output
+as_tibble(iris)
 
-Rows where the life expectancy is greater than 82
-```{r}
-filter(gapminder)
-```
 
-## Your Turn 2
 
-Use Boolean operators to alter the code below to return only the rows that contain:
+### FILTERING AND SORTING ####
 
-* United States before 1970
+#the tidyverse's dplyr provides intuitive functions for exploring and analyzing dataframes
 
-```{r}
-filter(gapminder, country == "New Zealand", year > 2000)
-```
+#let's go back to our little pollution dataset
+pollution
 
-*  Countries where life expectancy in 2007 is below 50
+#show me only the ones with a "large" size
+filter(pollution, size == "large")
 
-```{r}
-filter(gapminder, country == "New Zealand", year > 2000)
-```
+#show me only the ones where the city is London
+filter(pollution, city == "London")
 
-* Records for any of "New Zealand", "Canada" or "United States"
+#for numeric values, you can use boolean operators 
+filter(pollution, amount > 20)
+filter(pollution, amount <= 22)
 
-```{r}
-filter(gapminder, country == "New Zealand", year > 2000)
-```
+#now, let's try filtering based on two different variables
+filter(pollution, amount > 20, size == "large") #note the comma separating the filtering terms
 
-## Your Turn 3
+#this can still get a little confusing once you wind up with larger amounts of steps to string together.
 
-Use `filter()` to get the records for the US, then plot the life expectancy over time.
+#enter a glorious feature of the tidyverse: the PIPE %>% 
+#the "pipe" - %>% - (shortcut is CTRL/CMD + SHIFT + M) allows you to chain together commands
 
-```{r}
-gapminder
-```
+#watch this, and see how much easier it becomes for a human to think through (and read later!)
+pollution %>% 
+  filter(size == "large")
 
-## Your Turn 4
+#Voila! So what just happened there?
+#Think of %>% as the equivalent of "and then do this"...
+#It takes the result and then applies something new to it, in sequential order
 
-Find the records with the smallest population.
-```{r}
+#This becomes easy to see when we add new functions - let's talk about sorting with arrange()
+pollution %>% 
+  arrange(amount)
 
-```
+#to sort by highest value, add desc()
+pollution %>% 
+  arrange(desc(amount))
 
-Find the records with the largest GDP per capita.
-```{r}
+#now let's go back to our filtering and add arranging too
+pollution %>% 
+  filter(size == "large") %>% 
+  arrange(desc(amount))
 
-```
+#add another filter criteria
+pollution %>% 
+  filter(size == "large", amount < 100) %>% 
+  arrange(desc(amount))
+
+#this can be formatted this way as well, if it's even easier for you to read
+#add another filter criteria
+pollution %>% 
+  filter(size == "large", 
+         amount < 100) %>% 
+  arrange(desc(amount))
+
+#think about what we just did here -- you can read the code and it intuitively makes sense 
+#each step sequentially listed and executes in order
+
+#let's take a look at some more intersting data now and try out some of these methods
+
+#### PRESIDENTIAL CANDIDATE TRIPS ####
+
+#load in data of prez candidate campaign trips between midterms and end of Jan
+events <- readRDS("events_saved.rds")
+
+# let's take a look at what we've got
+events
+
+# even easier to see a dataset with View()
+# click on its name under the environment tab in upper right, or 
+View(events)
+# can also pipe the results of a chain if we wanted to
+events %>% 
+  view()
+# can you think of when we might find ourselves wanting to do that?
+
+
+
+
+
 
 ## Quiz 
 
