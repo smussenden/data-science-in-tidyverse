@@ -221,7 +221,93 @@ events %>%
 
 #### GROUPING AND AGGREGATING ####
 
-# you can probably see 
+# able to aggregate our campaign trips would be helpful at this point, right?
+# let's get into how to do it using the tidyverse and dplyr's group_by() and summarise() functions
+
+# have you all grouped before in other languages? In base R itself?  Let's discuss.
+
+# grouping to see how many trips each candidate have been on in our data
+# getting used to n()
+events %>% 
+  group_by(cand_fullname) %>% 
+  summarise(n())
+
+# now let's add arrange to see who has the most trips
+events %>% 
+  group_by(cand_fullname) %>% 
+  summarise(n()) %>% 
+  arrange(n)
+
+# hmm - what's going on here? Look closely and see what the generated count column is called
+events %>% 
+  group_by(cand_fullname) %>% 
+  summarise(n()) %>% 
+  arrange("n()")
+
+# that doesn't work either.  What about this.
+events %>% 
+  group_by(cand_fullname) %>% 
+  summarise(n()) %>% 
+  arrange()
+
+# Ah - so that sort of works? But not really, how do we get desc
+events %>% 
+  group_by(cand_fullname) %>% 
+  summarise(n()) %>% 
+  arrange(desc)
+
+# Oy - this is getting frustrating. How do we solve?
+# By doing this: giving the new column a name of our own. Check it out:
+events %>% 
+  group_by(cand_fullname) %>% 
+  summarise(n = n()) 
+
+# Now we can do:
+events %>% 
+  group_by(cand_fullname) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n))
+
+# Bingo
+# We can call the new columnn anything we want. "n" is a common thing for counts, but can be anything
+events %>% 
+  group_by(cand_fullname) %>% 
+  summarise(numtrips = n()) %>% 
+  arrange(desc(numtrips))
+
+# Now for the magic
+# Because this counting is such a common operation, and because the n() becomes a pain to deal with...
+# ...there is a special shortcut that we can use that collapses everything into one function
+events %>% 
+  count(cand_fullname)
+
+events %>% 
+  count(cand_fullname) %>% 
+  arrange(desc(n))
+
+# top states visited
+events %>% 
+  count(state) %>% 
+  arrange(desc(n))
+
+# top months
+events %>% 
+  count(month) %>% 
+  arrange(desc(n))
+
+# top single day for most trips
+events %>% 
+  count(date) %>% 
+  arrange(desc(n))
+
+# we can also group by **more than one** variable
+# which candidates have gone to which states?
+events %>% 
+  count(cand_fullname, state) %>% 
+  arrange(state, desc(n))
+
+
+
 
 
 
