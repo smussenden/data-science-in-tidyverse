@@ -169,9 +169,14 @@ events %>%
   filter(year(date) == 2018,
          month(date) < 12)
 
+#also allows us to do things like, hmm, I only want to see events the first week of every month 
+events %>% 
+  filter(day(date) <= 7)
 
-
-
+#now who's visiting Iowa the first week of a month 
+events %>% 
+  filter(day(date) <= 7,
+         state == "IA")
 
 
 month(events$date)
