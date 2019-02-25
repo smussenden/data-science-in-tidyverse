@@ -12,6 +12,7 @@
 
 #load the packages we'll need
 library(tidyverse)
+library(lubridate)
   
   
 # Toy dataset to use created manually with tribble function (for creating tibbles)
@@ -102,11 +103,14 @@ pollution %>%
 #think about what we just did here -- you can read the code and it intuitively makes sense 
 #each step sequentially listed and executes in order
 
-#let's take a look at some more intersting data now and try out some of these methods
+
+
 
 #### PRESIDENTIAL CANDIDATE TRIPS ####
 
-#load in data of prez candidate campaign trips between midterms and end of Jan
+# let's take a look at some more intersting data now and try out some of these methods
+
+# load in data of prez candidate campaign trips between midterms and end of Jan
 events <- readRDS("events_saved.rds")
 
 # let's take a look at what we've got
@@ -118,7 +122,70 @@ View(events)
 # can also pipe the results of a chain if we wanted to
 events %>% 
   view()
-# can you think of when we might find ourselves wanting to do that?
+# can you think of when we might find ourselves wanting to do that? (hint: think big)
+
+# Now let's try out some of our filtering and arranging techniques
+
+# show all events in Iowa
+events %>% 
+  filter(state == "IA")
+
+# Has Kamala Harris been to Iowa?
+events %>% 
+  filter(state == "IA",
+         cand_lastname == "Harris")
+
+# What about another candidate
+events %>% 
+  filter(state == "IA",
+         cand_lastname == "Gillibrand")
+
+# let's talk about **DATE-specific** stuff ####
+# if I have a properly formatted date in a dataframe, can I sort by it? Yes.
+events %>% 
+  filter(state == "IA") %>% 
+  arrange(desc(date))
+
+# what if I want to pull out only certain ranges of dates? Several approaches.
+
+# specifiying a specific date using as.Date()
+events %>% 
+  filter(date < as.Date("2018-12-31"))
+
+# take advantage of the LUBRIDATE package - a tidyverse package specifically for dates
+# note: lubridate needs to be called separately at the top with library(lubridate) - it doesn't yet load with library(tidyverse)
+
+# now watch what we can do...
+events %>% 
+  filter(year(date) == 2018)
+
+#just events in January 2019
+events %>% 
+  filter(year(date) == 2019,
+         month(date) == 1)
+
+#events earlier than Dec 2018
+events %>% 
+  filter(year(date) == 2018,
+         month(date) < 12)
+
+
+
+
+
+
+month(events$date)
+
+
+
+
+
+# Are there questions you're curious about? Let's discuss.
+
+
+
+
+
 
 
 
