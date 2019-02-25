@@ -105,7 +105,6 @@ pollution %>%
 
 
 
-
 #### PRESIDENTIAL CANDIDATE TRIPS ####
 
 # let's take a look at some more intersting data now and try out some of these methods
@@ -159,28 +158,70 @@ events %>%
 events %>% 
   filter(year(date) == 2018)
 
-#just events in January 2019
+# just events in January 2019
 events %>% 
   filter(year(date) == 2019,
          month(date) == 1)
 
-#events earlier than Dec 2018
+# events earlier than Dec 2018
 events %>% 
   filter(year(date) == 2018,
          month(date) < 12)
 
-#also allows us to do things like, hmm, I only want to see events the first week of every month 
+# also allows us to do things like, hmm, I only want to see events the first week of every month 
 events %>% 
   filter(day(date) <= 7)
 
-#now who's visiting Iowa the first week of a month 
+# now who's visiting Iowa the first week of a month 
 events %>% 
   filter(day(date) <= 7,
          state == "IA")
 
 
-month(events$date)
+# This is helpful but let's say you're doing this all the time
+# It may be easier to create new columns to hold these values
+# Brings us to another key function of dpylr/tidyverse - **MUTATE**
 
+#### ADDING COLUMNS WITH MUTATE ####
+
+# to add a column, you give it a name, then a single equal sign (=), then define what's in it. Test example:
+events %>% 
+  mutate(mycolumn = "hi there")
+
+events %>% 
+  mutate(electioncycle = 2020)
+
+# now let's try adding our date-related columns.  First we'll try year.
+events %>% 
+  mutate(year = year(date))
+
+# we can add multiple columns as part of one mutate call. Let's do year, month and day in one swoop.
+events %>% 
+  mutate(year = year(date),
+         month = month(date),
+         day = day(date))
+
+# this is a good time to remind ourselves that if we want to save our new columns, need to create new object or overwrite
+events <- events %>% 
+  mutate(year = year(date),
+         month = month(date),
+         day = day(date))
+
+# now we can use our new columns to filter
+events %>% 
+  filter(year == 2019,
+         month == 1)
+
+# show me just Kamala's events in January
+events %>% 
+  filter(year == 2019,
+         month == 1,
+         cand_lastname == "Harris")
+
+
+#### GROUPING AND AGGREGATING ####
+
+# you can probably see 
 
 
 
