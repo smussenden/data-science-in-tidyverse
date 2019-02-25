@@ -339,13 +339,22 @@ events %>%
             event_type == TRUE ~ "other"
       ))
 
+# Of course, you may be asking: wouldn't it be nice if we could standardize...
+# ...based on certain keywords or patterns?  Instead of spelling out every variation.
+
+# The answer is yes. Thanks to "string functions"...!
+
+# We'll show a quick example of what that looks like, and then start from the beginning in the next module.
+# 
+events %>%
+  mutate(new_type = case_when(
+    str_detect(event_type, "event") ~ "event")
+  )
 
 
+# We'll take a closer look at string functions now using the stringr package.
 
-
-
-
-# Are there questions you're curious about? Let's discuss.
+# First, are there questions? Let's discuss.
 
 
 
