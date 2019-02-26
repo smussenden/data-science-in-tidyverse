@@ -1,21 +1,20 @@
 Transforming Data, Part A
 ================
 
-load the packages we’ll
-    need
+Load the packages we'll need
 
 ``` r
 library(tidyverse)
 ```
 
-    ## -- Attaching packages ------------------------------------------------------ tidyverse 1.2.1 --
+    ## -- Attaching packages ---------------------------------------------------------------------------------------------------- tidyverse 1.2.1 --
 
     ## v ggplot2 3.1.0       v purrr   0.3.0  
     ## v tibble  2.0.1       v dplyr   0.8.0.1
     ## v tidyr   0.8.2       v stringr 1.4.0  
     ## v readr   1.3.1       v forcats 0.4.0
 
-    ## -- Conflicts --------------------------------------------------------- tidyverse_conflicts() --
+    ## -- Conflicts ------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
@@ -30,8 +29,7 @@ library(lubridate)
     ## 
     ##     date
 
-Toy dataset to use, created manually with
-tibbles
+Toy dataset to use, created manually with a tibble
 
 ``` r
 pollution <- tibble(city=c("New York", "New York", "London", "London", "Beijing", "Beijing"),
@@ -39,11 +37,10 @@ pollution <- tibble(city=c("New York", "New York", "London", "London", "Beijing"
                amount=c(23, 14, 22, 16, 121, 56))
 ```
 
-What are “tibbles”…?  
-They’re dataframes, with some additional tidyverse-infused features  
-Returns more readable output in the console  
-let’s see the data we just created, you’ll see how a tibble view differs
-in the console
+*What are "tibbles"...?*
+They're dataframes, with some additional tidyverse-infused features. Returns more readable output in the console.
+
+Let's see the data we just created, you'll see how a tibble view differs in the console
 
 ``` r
 pollution
@@ -59,8 +56,7 @@ pollution
     ## 5 Beijing  large    121
     ## 6 Beijing  small     56
 
-since there are only a handful of rows, a bit harder to see - let’s try
-the built-in IRIS data
+Since there are only a handful of rows, a bit harder to see - let's try the built-in "iris" data
 
 ``` r
 iris
@@ -218,7 +214,7 @@ iris
     ## 149          6.2         3.4          5.4         2.3  virginica
     ## 150          5.9         3.0          5.1         1.8  virginica
 
-that was a lot of output\! can limit rows with head()
+That was a lot of output! Can limit rows with head()
 
 ``` r
 head(iris)
@@ -232,7 +228,7 @@ head(iris)
     ## 5          5.0         3.6          1.4         0.2  setosa
     ## 6          5.4         3.9          1.7         0.4  setosa
 
-but let’s see how tibbles differ in their output
+But let's see how tibbles differ in their output
 
 ``` r
 as_tibble(iris)
@@ -255,10 +251,9 @@ as_tibble(iris)
 
 ### FILTERING AND SORTING
 
-the tidyverse’s dplyr provides intuitive functions for exploring and
-analyzing dataframes
+The tidyverse's *dplyr* provides intuitive functions for exploring and analyzing dataframes
 
-let’s go back to our little pollution dataset
+Let's go back to our little pollution dataset
 
 ``` r
 pollution
@@ -274,7 +269,7 @@ pollution
     ## 5 Beijing  large    121
     ## 6 Beijing  small     56
 
-show me only the ones with a “large” size
+Show me only the ones with a "large" size
 
 ``` r
 filter(pollution, size == "large")
@@ -287,7 +282,7 @@ filter(pollution, size == "large")
     ## 2 London   large     22
     ## 3 Beijing  large    121
 
-show me only the ones where the city is London
+Show me only the ones where the city is London
 
 ``` r
 filter(pollution, city == "London")
@@ -299,7 +294,7 @@ filter(pollution, city == "London")
     ## 1 London large     22
     ## 2 London small     16
 
-for numeric values, you can use boolean operators
+For numeric values, you can use boolean operators
 
 ``` r
 filter(pollution, amount > 20)
@@ -324,8 +319,7 @@ filter(pollution, amount <= 22)
     ## 2 London   large     22
     ## 3 London   small     16
 
-now, let’s try filtering based on two different
-variables
+Now, let's try filtering based on two different variables
 
 ``` r
 filter(pollution, amount > 20, size == "large") #'note the comma separating the filtering terms
@@ -338,16 +332,13 @@ filter(pollution, amount > 20, size == "large") #'note the comma separating the 
     ## 2 London   large     22
     ## 3 Beijing  large    121
 
-this can still get a little confusing once you wind up with larger
-amounts of steps to string together.
+This can still get a little confusing once you wind up with larger amounts of steps to string together.
 
-enter a glorious feature of the tidyverse: **the PIPE** `%>%`
+Enter a glorious feature of the tidyverse: **the PIPE** `%>%`
 
-the “pipe” (shortcut is CTRL/CMD + SHIFT + M) allows you to chain
-together commands
+The "pipe" (shortcut is CTRL/CMD + SHIFT + M) allows you to chain together commands
 
-watch this, and see how much easier it becomes for a human to think
-through (and read later\!)
+Watch this, and see how much easier it becomes for a human to think through (and read later!)
 
 ``` r
 pollution %>% 
@@ -361,12 +352,11 @@ pollution %>%
     ## 2 London   large     22
     ## 3 Beijing  large    121
 
-Voila\! So what just happened there?  
-Think of %\>% as the equivalent of “and then do this”…  
-It takes the result and then applies something new to it, in sequential
-order  
-This becomes easy to see when we add new functions - let’s talk about
-sorting with arrange()
+Voila! So what just happened there?
+Think of %&gt;% as the equivalent of "and then do this"...
+It takes the result and then applies something new to it, in sequential order
+
+This becomes easy to see when we add new functions - let's talk about sorting with arrange()
 
 ``` r
 pollution %>% 
@@ -383,7 +373,7 @@ pollution %>%
     ## 5 Beijing  small     56
     ## 6 Beijing  large    121
 
-to sort by highest value, add desc()
+To sort by highest value, add desc()
 
 ``` r
 pollution %>% 
@@ -400,7 +390,7 @@ pollution %>%
     ## 5 London   small     16
     ## 6 New York small     14
 
-now let’s go back to our filtering and add arranging too
+Now let's go back to our filtering and add arranging, too
 
 ``` r
 pollution %>% 
@@ -415,7 +405,7 @@ pollution %>%
     ## 2 New York large     23
     ## 3 London   large     22
 
-add another filter criteria
+Add another filter criteria
 
 ``` r
 pollution %>% 
@@ -429,9 +419,8 @@ pollution %>%
     ## 1 New York large     23
     ## 2 London   large     22
 
-this can be formatted this way as well, if it’s even easier for you to
-read  
-add another filter criteria
+This can be formatted this way as well, if it's even easier for you to read
+Let's add another filter criteria
 
 ``` r
 pollution %>% 
@@ -446,85 +435,80 @@ pollution %>%
     ## 1 New York large     23
     ## 2 London   large     22
 
-think about what we just did here – you can read the code and it
-intuitively makes sense  
-each step sequentially listed and executes in order
+Think about what we just did here.
+You can read the code and it intuitively makes sense.
+Each step sequentially listed and executes in order.
 
 ### PRESIDENTIAL CANDIDATE TRIPS
 
-let’s take a look at some more intersting data now and try out some of
-these methods
+Let's take a look at some more intersting data now and try out some of these methods
 
-load in data of prez candidate campaign trips between midterms and end
-of Jan
+Load in data of prez candidate campaign trips between midterms and end of Jan
 
 ``` r
 events <- readRDS("events_saved.rds")
 ```
 
-let’s take a look at what we’ve got
+Let's take a look at what we've got
 
 ``` r
 events
 ```
 
-    ## # A tibble: 88 x 10
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  3 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  4 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  5 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  6 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  7 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  8 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  9 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ## 10 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## # ... with 78 more rows, and 4 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>
+    ## # A tibble: 88 x 7
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  3 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  4 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  5 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  6 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  7 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  8 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  9 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ## 10 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## # ... with 78 more rows, and 1 more variable: description <chr>
 
-even easier to see a dataset with `View()`  
-click on its name under the environment tab in upper right, or
+Even easier to see a dataset with `View()`
+Click on its name under the environment tab in upper right, or:
 
 ``` r
 View(events)
 ```
 
-can also pipe the results of a chain if we wanted to
+Can also pipe the results of a chain if we wanted to
 
 ``` r
 events %>% 
   view()
 ```
 
-can you think of when we might find ourselves wanting to do that? (hint:
-think big)
+Can you think of when we might find ourselves wanting to do that? (hint: think big)
 
-Now let’s try out some of our filtering and arranging techniques
+Now let's try out some of our filtering and arranging techniques.
 
-show all events in Iowa
+Show all events in Iowa:
 
 ``` r
 events %>% 
   filter(state == "IA")
 ```
 
-    ## # A tibble: 21 x 10
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  2 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  3 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  4 2019-01-28 Kamala        Harris        Kamala Harris Des ~ <NA>        
-    ##  5 2019-01-27 Eric          Swalwell      Eric Swalwell Mari~ <NA>        
-    ##  6 2019-01-27 John          Hickenlooper  John Hickenl~ Des ~ <NA>        
-    ##  7 2019-01-25 John          Delaney       John Delaney  Des ~ <NA>        
-    ##  8 2019-01-18 Kirsten       Gillibrand    Kirsten Gill~ Siou~ Des Moines  
-    ##  9 2019-01-11 John          Delaney       John Delaney  Des ~ Cedar Rapid~
-    ## 10 2019-01-09 Tom           Steyer        Tom Steyer    Des ~ <NA>        
-    ## # ... with 11 more rows, and 4 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>
+    ## # A tibble: 21 x 7
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  2 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  3 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  4 2019-01-28 Kamala        Harris        Des ~ IA    town hall 
+    ##  5 2019-01-27 Eric          Swalwell      Mari~ IA    meet and ~
+    ##  6 2019-01-27 John          Hickenlooper  Des ~ IA    house par~
+    ##  7 2019-01-25 John          Delaney       Des ~ IA    event spe~
+    ##  8 2019-01-18 Kirsten       Gillibrand    Siou~ IA    organizin~
+    ##  9 2019-01-11 John          Delaney       Des ~ IA    organizin~
+    ## 10 2019-01-09 Tom           Steyer        Des ~ IA    meet and ~
+    ## # ... with 11 more rows, and 1 more variable: description <chr>
 
 Has Kamala Harris been to Iowa?
 
@@ -534,12 +518,10 @@ events %>%
          cand_lastname == "Harris")
 ```
 
-    ## # A tibble: 1 x 10
-    ##   date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##   <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ## 1 2019-01-28 Kamala        Harris        Kamala Harris Des ~ <NA>        
-    ## # ... with 4 more variables: state <chr>, event_type <chr>, sponsor <chr>,
-    ## #   description <chr>
+    ## # A tibble: 1 x 7
+    ##   date       cand_restname cand_lastname city  state event_type description
+    ##   <date>     <chr>         <chr>         <chr> <chr> <chr>      <chr>      
+    ## 1 2019-01-28 Kamala        Harris        Des ~ IA    town hall  CNN Town H~
 
 What about another candidate
 
@@ -549,16 +531,13 @@ events %>%
          cand_lastname == "Gillibrand")
 ```
 
-    ## # A tibble: 1 x 10
-    ##   date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##   <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ## 1 2019-01-18 Kirsten       Gillibrand    Kirsten Gill~ Siou~ Des Moines  
-    ## # ... with 4 more variables: state <chr>, event_type <chr>, sponsor <chr>,
-    ## #   description <chr>
+    ## # A tibble: 1 x 7
+    ##   date       cand_restname cand_lastname city  state event_type description
+    ##   <date>     <chr>         <chr>         <chr> <chr> <chr>      <chr>      
+    ## 1 2019-01-18 Kirsten       Gillibrand    Siou~ IA    organizin~ Organizing~
 
-let’s talk about **DATE-specific** stuff  
-if I have a properly formatted date in a dataframe, can I sort by it?
-*Yes.*
+Let's talk about **date-specific** stuff.
+If I have a properly formatted date in a dataframe, can I sort by it? *Yes.*
 
 ``` r
 events %>% 
@@ -566,75 +545,70 @@ events %>%
   arrange(desc(date))
 ```
 
-    ## # A tibble: 21 x 10
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  2 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  3 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  4 2019-01-28 Kamala        Harris        Kamala Harris Des ~ <NA>        
-    ##  5 2019-01-27 Eric          Swalwell      Eric Swalwell Mari~ <NA>        
-    ##  6 2019-01-27 John          Hickenlooper  John Hickenl~ Des ~ <NA>        
-    ##  7 2019-01-25 John          Delaney       John Delaney  Des ~ <NA>        
-    ##  8 2019-01-18 Kirsten       Gillibrand    Kirsten Gill~ Siou~ Des Moines  
-    ##  9 2019-01-11 John          Delaney       John Delaney  Des ~ Cedar Rapid~
-    ## 10 2019-01-09 Tom           Steyer        Tom Steyer    Des ~ <NA>        
-    ## # ... with 11 more rows, and 4 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>
+    ## # A tibble: 21 x 7
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  2 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  3 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  4 2019-01-28 Kamala        Harris        Des ~ IA    town hall 
+    ##  5 2019-01-27 Eric          Swalwell      Mari~ IA    meet and ~
+    ##  6 2019-01-27 John          Hickenlooper  Des ~ IA    house par~
+    ##  7 2019-01-25 John          Delaney       Des ~ IA    event spe~
+    ##  8 2019-01-18 Kirsten       Gillibrand    Siou~ IA    organizin~
+    ##  9 2019-01-11 John          Delaney       Des ~ IA    organizin~
+    ## 10 2019-01-09 Tom           Steyer        Des ~ IA    meet and ~
+    ## # ... with 11 more rows, and 1 more variable: description <chr>
 
-what if I want to pull out only certain ranges of dates? *Several
-approaches.* specifiying a specific date using as.Date()
+What if I want to pull out only certain ranges of dates? *Several approaches.*
+Specifiying a specific date using as.Date()
 
 ``` r
 events %>% 
   filter(date < as.Date("2018-12-31"))
 ```
 
-    ## # A tibble: 27 x 10
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2018-12-23 Beto          O'Rourke      Beto O'Rourke Torn~ <NA>        
-    ##  3 2018-12-20 Pete          Buttigieg     Pete Buttigi~ Des ~ <NA>        
-    ##  4 2018-12-20 Jeff          Merkley       Jeff Merkley  Des ~ <NA>        
-    ##  5 2018-12-20 Eric          Swalwell      Eric Swalwell Des ~ <NA>        
-    ##  6 2018-12-20 Andrew        Yang          Andrew Yang   Des ~ <NA>        
-    ##  7 2018-12-15 Jeff          Merkley       Jeff Merkley  Torn~ <NA>        
-    ##  8 2018-12-15 Beto          O'Rourke      Beto O'Rourke Torn~ <NA>        
-    ##  9 2018-12-14 Elizabeth     Warren        Elizabeth Wa~ Balt~ <NA>        
-    ## 10 2018-12-14 Eric          Swalwell      Eric Swalwell Manc~ <NA>        
-    ## # ... with 17 more rows, and 4 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>
+    ## # A tibble: 27 x 7
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2018-12-23 Beto          O'Rourke      Torn~ TX    tour      
+    ##  3 2018-12-20 Pete          Buttigieg     Des ~ IA    event spe~
+    ##  4 2018-12-20 Jeff          Merkley       Des ~ IA    event spe~
+    ##  5 2018-12-20 Eric          Swalwell      Des ~ IA    event spe~
+    ##  6 2018-12-20 Andrew        Yang          Des ~ IA    event spe~
+    ##  7 2018-12-15 Jeff          Merkley       Torn~ TX    tour      
+    ##  8 2018-12-15 Beto          O'Rourke      Torn~ TX    tour      
+    ##  9 2018-12-14 Elizabeth     Warren        Balt~ MD    event spe~
+    ## 10 2018-12-14 Eric          Swalwell      Manc~ NH    event spe~
+    ## # ... with 17 more rows, and 1 more variable: description <chr>
 
-take advantage of the LUBRIDATE package - a tidyverse package
-specifically for dates  
-note: lubridate needs to be called separately at the top with
-library(lubridate) - it doesn’t yet load with library(tidyverse)
+Take advantage of the LUBRIDATE package - a tidyverse package specifically for dates
+*Note: lubridate needs to be called separately at the top with library(lubridate) - it doesn't yet load with library(tidyverse)*
 
-now watch what we can do…
+Now watch what we can do:
 
 ``` r
 events %>% 
   filter(year(date) == 2018)
 ```
 
-    ## # A tibble: 26 x 10
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2018-12-23 Beto          O'Rourke      Beto O'Rourke Torn~ <NA>        
-    ##  2 2018-12-20 Pete          Buttigieg     Pete Buttigi~ Des ~ <NA>        
-    ##  3 2018-12-20 Jeff          Merkley       Jeff Merkley  Des ~ <NA>        
-    ##  4 2018-12-20 Eric          Swalwell      Eric Swalwell Des ~ <NA>        
-    ##  5 2018-12-20 Andrew        Yang          Andrew Yang   Des ~ <NA>        
-    ##  6 2018-12-15 Jeff          Merkley       Jeff Merkley  Torn~ <NA>        
-    ##  7 2018-12-15 Beto          O'Rourke      Beto O'Rourke Torn~ <NA>        
-    ##  8 2018-12-14 Elizabeth     Warren        Elizabeth Wa~ Balt~ <NA>        
-    ##  9 2018-12-14 Eric          Swalwell      Eric Swalwell Manc~ <NA>        
-    ## 10 2018-12-13 Tom           Steyer        Tom Steyer    Fres~ <NA>        
-    ## # ... with 16 more rows, and 4 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>
+    ## # A tibble: 26 x 7
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2018-12-23 Beto          O'Rourke      Torn~ TX    tour      
+    ##  2 2018-12-20 Pete          Buttigieg     Des ~ IA    event spe~
+    ##  3 2018-12-20 Jeff          Merkley       Des ~ IA    event spe~
+    ##  4 2018-12-20 Eric          Swalwell      Des ~ IA    event spe~
+    ##  5 2018-12-20 Andrew        Yang          Des ~ IA    event spe~
+    ##  6 2018-12-15 Jeff          Merkley       Torn~ TX    tour      
+    ##  7 2018-12-15 Beto          O'Rourke      Torn~ TX    tour      
+    ##  8 2018-12-14 Elizabeth     Warren        Balt~ MD    event spe~
+    ##  9 2018-12-14 Eric          Swalwell      Manc~ NH    event spe~
+    ## 10 2018-12-13 Tom           Steyer        Fres~ CA    event spe~
+    ## # ... with 16 more rows, and 1 more variable: description <chr>
 
-just events in January 2019
+Just events in January 2019
 
 ``` r
 events %>% 
@@ -642,23 +616,22 @@ events %>%
          month(date) == 1)
 ```
 
-    ## # A tibble: 61 x 10
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  2 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  3 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  4 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  5 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  6 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  7 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  8 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ##  9 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## 10 2019-01-28 Howard        Schultz       Howard Schul~ New ~ <NA>        
-    ## # ... with 51 more rows, and 4 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>
+    ## # A tibble: 61 x 7
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  2 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  3 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  4 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  5 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  6 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  7 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  8 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ##  9 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## 10 2019-01-28 Howard        Schultz       New ~ NY    book tour 
+    ## # ... with 51 more rows, and 1 more variable: description <chr>
 
-events earlier than Dec 2018
+Events earlier than Dec 2018
 
 ``` r
 events %>% 
@@ -666,43 +639,39 @@ events %>%
          month(date) < 12)
 ```
 
-    ## # A tibble: 6 x 10
-    ##   date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##   <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ## 1 2018-11-29 Elizabeth     Warren        Elizabeth Wa~ Wash~ <NA>        
-    ## 2 2018-11-28 Bernie        Sanders       Bernie Sande~ Wash~ <NA>        
-    ## 3 2018-11-17 Kamala        Harris        Kamala Harris Jack~ <NA>        
-    ## 4 2018-11-16 Andrew        Yang          Andrew Yang   Iowa~ <NA>        
-    ## 5 2018-11-16 Deval         Patrick       Deval Patrick Char~ <NA>        
-    ## 6 2018-11-10 Eric          Swalwell      Eric Swalwell Des ~ <NA>        
-    ## # ... with 4 more variables: state <chr>, event_type <chr>, sponsor <chr>,
-    ## #   description <chr>
+    ## # A tibble: 6 x 7
+    ##   date       cand_restname cand_lastname city  state event_type description
+    ##   <date>     <chr>         <chr>         <chr> <chr> <chr>      <chr>      
+    ## 1 2018-11-29 Elizabeth     Warren        Wash~ DC    event spe~ Foreign Po~
+    ## 2 2018-11-28 Bernie        Sanders       Wash~ DC    event spe~ “Where We ~
+    ## 3 2018-11-17 Kamala        Harris        Jack~ MS    campaign ~ Campaign w~
+    ## 4 2018-11-16 Andrew        Yang          Iowa~ IA    event spe~ Event at U~
+    ## 5 2018-11-16 Deval         Patrick       Char~ SC    event spe~ keynote at~
+    ## 6 2018-11-10 Eric          Swalwell      Des ~ IA    event spe~ Spoke with~
 
-also allows us to do things like, hmm, I only want to see events the
-first week of every month
+Also allows us to do things like, "I only want to see events the *first week of every month*"
 
 ``` r
 events %>% 
   filter(day(date) <= 7)
 ```
 
-    ## # A tibble: 10 x 10
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2019-01-07 Julian        Castro        Julian Castro Ceda~ Iowa City, ~
-    ##  3 2019-01-04 Elizabeth     Warren        Elizabeth Wa~ Des ~ Council Blu~
-    ##  4 2019-01-03 John          Delaney       John Delaney  Dill~ <NA>        
-    ##  5 2018-12-04 Tom           Steyer        Tom Steyer    Char~ <NA>        
-    ##  6 2018-12-04 Michael       Bloomberg     Michael Bloo~ Des ~ <NA>        
-    ##  7 2018-12-03 Bernie        Sanders       Bernie Sande~ Wash~ <NA>        
-    ##  8 2018-12-02 Tulsi         Gabbard       Tulsi Gabbard Exet~ Concord     
-    ##  9 2018-12-02 John          Delaney       John Delaney  Siou~ <NA>        
-    ## 10 2018-12-01 Amy           Klobuchar     Amy Klobuchar Perry <NA>        
-    ## # ... with 4 more variables: state <chr>, event_type <chr>, sponsor <chr>,
-    ## #   description <chr>
+    ## # A tibble: 10 x 7
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-07 Julian        Castro        Ceda~ IA    meet and ~
+    ##  3 2019-01-04 Elizabeth     Warren        Des ~ IA    <NA>      
+    ##  4 2019-01-03 John          Delaney       Dill~ TX    meet and ~
+    ##  5 2018-12-04 Tom           Steyer        Char~ SC    event spe~
+    ##  6 2018-12-04 Michael       Bloomberg     Des ~ IA    forum     
+    ##  7 2018-12-03 Bernie        Sanders       Wash~ DC    town hall 
+    ##  8 2018-12-02 Tulsi         Gabbard       Exet~ NH    meet and ~
+    ##  9 2018-12-02 John          Delaney       Siou~ IA    meet and ~
+    ## 10 2018-12-01 Amy           Klobuchar     Perry IA    event spe~
+    ## # ... with 1 more variable: description <chr>
 
-now who’s visiting Iowa the first week of a month
+Who's visiting Iowa the first week of a month?
 
 ``` r
 events %>% 
@@ -710,94 +679,91 @@ events %>%
          state == "IA")
 ```
 
-    ## # A tibble: 5 x 10
-    ##   date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##   <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ## 1 2019-01-07 Julian        Castro        Julian Castro Ceda~ Iowa City, ~
-    ## 2 2019-01-04 Elizabeth     Warren        Elizabeth Wa~ Des ~ Council Blu~
-    ## 3 2018-12-04 Michael       Bloomberg     Michael Bloo~ Des ~ <NA>        
-    ## 4 2018-12-02 John          Delaney       John Delaney  Siou~ <NA>        
-    ## 5 2018-12-01 Amy           Klobuchar     Amy Klobuchar Perry <NA>        
-    ## # ... with 4 more variables: state <chr>, event_type <chr>, sponsor <chr>,
-    ## #   description <chr>
+    ## # A tibble: 5 x 7
+    ##   date       cand_restname cand_lastname city  state event_type description
+    ##   <date>     <chr>         <chr>         <chr> <chr> <chr>      <chr>      
+    ## 1 2019-01-07 Julian        Castro        Ceda~ IA    meet and ~ Meetings w~
+    ## 2 2019-01-04 Elizabeth     Warren        Des ~ IA    <NA>       Campaign e~
+    ## 3 2018-12-04 Michael       Bloomberg     Des ~ IA    forum      "\"Paris t~
+    ## 4 2018-12-02 John          Delaney       Siou~ IA    meet and ~ Meet and g~
+    ## 5 2018-12-01 Amy           Klobuchar     Perry IA    event spe~ Iowa Farme~
 
-This is helpful but let’s say you’re doing this all the time  
-It may be easier to create new columns to hold these values  
+This is helpful but let's say you're doing this all the time.
+It may be easier to create new columns to hold these values.
+
 Brings us to another key function of dpylr/tidyverse - **MUTATE**
 
 ### ADDING COLUMNS WITH MUTATE
 
-to add a column, you give it a name, then a single equal sign (=), then
-define what’s in it. Test example:
+To add a column, you give it a name, then a single equal sign (=), then define what's in it.
+Test example:
 
 ``` r
 events %>% 
   mutate(mycolumn = "hi there")
 ```
 
-    ## # A tibble: 88 x 11
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  3 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  4 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  5 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  6 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  7 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  8 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  9 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ## 10 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## # ... with 78 more rows, and 5 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>, mycolumn <chr>
+    ## # A tibble: 88 x 8
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  3 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  4 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  5 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  6 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  7 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  8 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  9 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ## 10 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## # ... with 78 more rows, and 2 more variables: description <chr>,
+    ## #   mycolumn <chr>
 
 ``` r
 events %>% 
   mutate(electioncycle = 2020)
 ```
 
-    ## # A tibble: 88 x 11
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  3 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  4 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  5 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  6 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  7 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  8 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  9 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ## 10 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## # ... with 78 more rows, and 5 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>,
+    ## # A tibble: 88 x 8
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  3 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  4 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  5 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  6 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  7 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  8 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  9 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ## 10 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## # ... with 78 more rows, and 2 more variables: description <chr>,
     ## #   electioncycle <dbl>
 
-now let’s try adding our date-related columns. First we’ll try year.
+Now let's try adding our date-related columns. First we'll try year.
 
 ``` r
 events %>% 
   mutate(year = year(date))
 ```
 
-    ## # A tibble: 88 x 11
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  3 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  4 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  5 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  6 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  7 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  8 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  9 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ## 10 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## # ... with 78 more rows, and 5 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>, year <dbl>
+    ## # A tibble: 88 x 8
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  3 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  4 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  5 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  6 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  7 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  8 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  9 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ## 10 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## # ... with 78 more rows, and 2 more variables: description <chr>,
+    ## #   year <dbl>
 
-we can add multiple columns as part of one mutate call. Let’s do year,
-month and day in one swoop.
+We can add multiple columns as part of one mutate call. Let's do year, month and day in one swoop.
 
 ``` r
 events %>% 
@@ -806,25 +772,23 @@ events %>%
          day = day(date))
 ```
 
-    ## # A tibble: 88 x 13
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  3 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  4 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  5 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  6 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  7 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  8 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  9 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ## 10 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## # ... with 78 more rows, and 7 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>, year <dbl>,
-    ## #   month <dbl>, day <int>
+    ## # A tibble: 88 x 10
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  3 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  4 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  5 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  6 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  7 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  8 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  9 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ## 10 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## # ... with 78 more rows, and 4 more variables: description <chr>,
+    ## #   year <dbl>, month <dbl>, day <int>
 
-this is a good time to remind ourselves that if we want to save our new
-columns, need to create new object or overwrite
+This is a good time to remind ourselves that if we want to save our new columns, need to *create new object* or *overwrite*
 
 ``` r
 events <- events %>% 
@@ -833,7 +797,7 @@ events <- events %>%
          day = day(date))
 ```
 
-now we can use our new columns to filter
+Now we can use our new columns to filter
 
 ``` r
 events %>% 
@@ -841,24 +805,23 @@ events %>%
          month == 1)
 ```
 
-    ## # A tibble: 61 x 13
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  2 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  3 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  4 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  5 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  6 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  7 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  8 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ##  9 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## 10 2019-01-28 Howard        Schultz       Howard Schul~ New ~ <NA>        
-    ## # ... with 51 more rows, and 7 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>, year <dbl>,
-    ## #   month <dbl>, day <int>
+    ## # A tibble: 61 x 10
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  2 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  3 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  4 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  5 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  6 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  7 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  8 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ##  9 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## 10 2019-01-28 Howard        Schultz       New ~ NY    book tour 
+    ## # ... with 51 more rows, and 4 more variables: description <chr>,
+    ## #   year <dbl>, month <dbl>, day <int>
 
-show me just Kamala’s events in January
+Show me just Kamala's events in January
 
 ``` r
 events %>% 
@@ -867,224 +830,217 @@ events %>%
          cand_lastname == "Harris")
 ```
 
-    ## # A tibble: 5 x 13
-    ##   date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##   <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ## 1 2019-01-28 Kamala        Harris        Kamala Harris Des ~ <NA>        
-    ## 2 2019-01-27 Kamala        Harris        Kamala Harris Oakl~ <NA>        
-    ## 3 2019-01-25 Kamala        Harris        Kamala Harris Colu~ <NA>        
-    ## 4 2019-01-24 Kamala        Harris        Kamala Harris New ~ <NA>        
-    ## 5 2019-01-15 Kamala        Harris        Kamala Harris Wash~ <NA>        
-    ## # ... with 7 more variables: state <chr>, event_type <chr>, sponsor <chr>,
-    ## #   description <chr>, year <dbl>, month <dbl>, day <int>
+    ## # A tibble: 5 x 10
+    ##   date       cand_restname cand_lastname city  state event_type description
+    ##   <date>     <chr>         <chr>         <chr> <chr> <chr>      <chr>      
+    ## 1 2019-01-28 Kamala        Harris        Des ~ IA    town hall  CNN Town H~
+    ## 2 2019-01-27 Kamala        Harris        Oakl~ CA    rally      Campaign K~
+    ## 3 2019-01-25 Kamala        Harris        Colu~ SC    event spe~ Pink Ice G~
+    ## 4 2019-01-24 Kamala        Harris        New ~ NY    talk show  The Daily ~
+    ## 5 2019-01-15 Kamala        Harris        Wash~ DC    town hall  NAACP Wome~
+    ## # ... with 3 more variables: year <dbl>, month <dbl>, day <int>
 
 ### GROUPING AND AGGREGATING
 
-able to aggregate our campaign trips would be helpful at this point,
-right?  
-let’s get into how to do it using the tidyverse and dplyr’s `group_by()`
-and `summarise()` functions
+Able to aggregate our campaign trips would be helpful at this point, right?
+Let's get into how to do it using the tidyverse and dplyr's `group_by()` and `summarise()`
 
-have you all grouped before in other languages? In base R itself? Let’s
-discuss.
+Have you all grouped before in other languages? In base R itself? Let's discuss.
 
-grouping to see how many trips each candidate have been on in our data  
-getting used to `n()`
+Grouping to see how many trips each candidate have been on in our data
+Getting used to `n()`
 
 ``` r
 events %>% 
-  group_by(cand_fullname) %>% 
+  group_by(cand_lastname) %>% 
   summarise(n())
 ```
 
     ## # A tibble: 24 x 2
-    ##    cand_fullname    `n()`
-    ##    <chr>            <int>
-    ##  1 Amy Klobuchar        1
-    ##  2 Andrew Yang          2
-    ##  3 Bernie Sanders       3
-    ##  4 Beto O'Rourke        4
-    ##  5 Cory Booker          6
-    ##  6 Deval Patrick        1
-    ##  7 Elizabeth Warren     7
-    ##  8 Eric Garcetti        1
-    ##  9 Eric Swalwell        7
-    ## 10 Howard Schultz       2
+    ##    cand_lastname `n()`
+    ##    <chr>         <int>
+    ##  1 Biden             6
+    ##  2 Bloomberg         6
+    ##  3 Booker            6
+    ##  4 Brown             2
+    ##  5 Buttigieg         2
+    ##  6 Castro            6
+    ##  7 Delaney           8
+    ##  8 Gabbard           1
+    ##  9 Garcetti          1
+    ## 10 Gillibrand        2
     ## # ... with 14 more rows
 
-now let’s add arrange to see who has the most trips
+now let's add arrange to see who has the most trips
 
 ``` r
+# (not run)  
 # events %>% 
-#   group_by(cand_fullname) %>% 
+#   group_by(cand_lastname) %>% 
 #   summarise(n()) %>% 
 #   arrange(n)
 ```
 
-hmm - what’s going on here? Look closely and see what the generated
-count column is called
+hmm - what's going on here? Look closely and see what the generated count column is called
 
 ``` r
 # events %>% 
-#   group_by(cand_fullname) %>% 
+#   group_by(cand_lastname) %>% 
 #   summarise(n()) %>% 
 #   arrange("n()")
 ```
 
-that doesn’t work either. What about this.
+that doesn't work either. What about this.
 
 ``` r
 events %>% 
-  group_by(cand_fullname) %>% 
+  group_by(cand_lastname) %>% 
   summarise(n()) %>% 
   arrange()
 ```
 
     ## # A tibble: 24 x 2
-    ##    cand_fullname    `n()`
-    ##    <chr>            <int>
-    ##  1 Amy Klobuchar        1
-    ##  2 Andrew Yang          2
-    ##  3 Bernie Sanders       3
-    ##  4 Beto O'Rourke        4
-    ##  5 Cory Booker          6
-    ##  6 Deval Patrick        1
-    ##  7 Elizabeth Warren     7
-    ##  8 Eric Garcetti        1
-    ##  9 Eric Swalwell        7
-    ## 10 Howard Schultz       2
+    ##    cand_lastname `n()`
+    ##    <chr>         <int>
+    ##  1 Biden             6
+    ##  2 Bloomberg         6
+    ##  3 Booker            6
+    ##  4 Brown             2
+    ##  5 Buttigieg         2
+    ##  6 Castro            6
+    ##  7 Delaney           8
+    ##  8 Gabbard           1
+    ##  9 Garcetti          1
+    ## 10 Gillibrand        2
     ## # ... with 14 more rows
 
 Ah - so that sort of works? But not really, how do we get desc
 
 ``` r
 # events %>% 
-#   group_by(cand_fullname) %>% 
+#   group_by(cand_lastname) %>% 
 #   summarise(n()) %>% 
 #   arrange(desc)
 ```
 
-Oy - this is getting frustrating. How do we solve?  
-By doing this: giving the new column a name of our own.  
+Oy - this is getting frustrating. How do we solve?
+By doing this: giving the new column a name of our own.
 Check it out:
 
 ``` r
 events %>% 
-  group_by(cand_fullname) %>% 
+  group_by(cand_lastname) %>% 
   summarise(n = n()) 
 ```
 
     ## # A tibble: 24 x 2
-    ##    cand_fullname        n
-    ##    <chr>            <int>
-    ##  1 Amy Klobuchar        1
-    ##  2 Andrew Yang          2
-    ##  3 Bernie Sanders       3
-    ##  4 Beto O'Rourke        4
-    ##  5 Cory Booker          6
-    ##  6 Deval Patrick        1
-    ##  7 Elizabeth Warren     7
-    ##  8 Eric Garcetti        1
-    ##  9 Eric Swalwell        7
-    ## 10 Howard Schultz       2
+    ##    cand_lastname     n
+    ##    <chr>         <int>
+    ##  1 Biden             6
+    ##  2 Bloomberg         6
+    ##  3 Booker            6
+    ##  4 Brown             2
+    ##  5 Buttigieg         2
+    ##  6 Castro            6
+    ##  7 Delaney           8
+    ##  8 Gabbard           1
+    ##  9 Garcetti          1
+    ## 10 Gillibrand        2
     ## # ... with 14 more rows
 
 Now we can do:
 
 ``` r
 events %>% 
-  group_by(cand_fullname) %>% 
+  group_by(cand_lastname) %>% 
   summarise(n = n()) %>% 
   arrange(desc(n))
 ```
 
     ## # A tibble: 24 x 2
-    ##    cand_fullname         n
-    ##    <chr>             <int>
-    ##  1 John Delaney          8
-    ##  2 Elizabeth Warren      7
-    ##  3 Eric Swalwell         7
-    ##  4 Kamala Harris         7
-    ##  5 Cory Booker           6
-    ##  6 Joe Biden             6
-    ##  7 Julian Castro         6
-    ##  8 Michael Bloomberg     6
-    ##  9 Beto O'Rourke         4
-    ## 10 John Hickenlooper     4
+    ##    cand_lastname     n
+    ##    <chr>         <int>
+    ##  1 Delaney           8
+    ##  2 Harris            7
+    ##  3 Swalwell          7
+    ##  4 Warren            7
+    ##  5 Biden             6
+    ##  6 Bloomberg         6
+    ##  7 Booker            6
+    ##  8 Castro            6
+    ##  9 Hickenlooper      4
+    ## 10 O'Rourke          4
     ## # ... with 14 more rows
 
-Bingo  
-We can call the new columnn anything we want. “n” is a common thing for
-counts,  
+Bingo
+We can call the new columnn anything we want. "n" is a common thing for counts,
 but can be anything
 
 ``` r
 events %>% 
-  group_by(cand_fullname) %>% 
+  group_by(cand_lastname) %>% 
   summarise(numtrips = n()) %>% 
   arrange(desc(numtrips))
 ```
 
     ## # A tibble: 24 x 2
-    ##    cand_fullname     numtrips
-    ##    <chr>                <int>
-    ##  1 John Delaney             8
-    ##  2 Elizabeth Warren         7
-    ##  3 Eric Swalwell            7
-    ##  4 Kamala Harris            7
-    ##  5 Cory Booker              6
-    ##  6 Joe Biden                6
-    ##  7 Julian Castro            6
-    ##  8 Michael Bloomberg        6
-    ##  9 Beto O'Rourke            4
-    ## 10 John Hickenlooper        4
+    ##    cand_lastname numtrips
+    ##    <chr>            <int>
+    ##  1 Delaney              8
+    ##  2 Harris               7
+    ##  3 Swalwell             7
+    ##  4 Warren               7
+    ##  5 Biden                6
+    ##  6 Bloomberg            6
+    ##  7 Booker               6
+    ##  8 Castro               6
+    ##  9 Hickenlooper         4
+    ## 10 O'Rourke             4
     ## # ... with 14 more rows
 
-Now for the magic  
-Because this counting is such a common operation, and because the `n()`
-becomes a pain to deal with…  
-…there is a special shortcut that we can use that collapses everything
-into one function
+Now for the magic
+Because this counting is such a common operation, and because the `n()` becomes a pain to deal with...
+...there is a special shortcut that we can use that collapses everything into one function
 
 ``` r
 events %>% 
-  count(cand_fullname)
+  count(cand_lastname)
 ```
 
     ## # A tibble: 24 x 2
-    ##    cand_fullname        n
-    ##    <chr>            <int>
-    ##  1 Amy Klobuchar        1
-    ##  2 Andrew Yang          2
-    ##  3 Bernie Sanders       3
-    ##  4 Beto O'Rourke        4
-    ##  5 Cory Booker          6
-    ##  6 Deval Patrick        1
-    ##  7 Elizabeth Warren     7
-    ##  8 Eric Garcetti        1
-    ##  9 Eric Swalwell        7
-    ## 10 Howard Schultz       2
+    ##    cand_lastname     n
+    ##    <chr>         <int>
+    ##  1 Biden             6
+    ##  2 Bloomberg         6
+    ##  3 Booker            6
+    ##  4 Brown             2
+    ##  5 Buttigieg         2
+    ##  6 Castro            6
+    ##  7 Delaney           8
+    ##  8 Gabbard           1
+    ##  9 Garcetti          1
+    ## 10 Gillibrand        2
     ## # ... with 14 more rows
 
 ``` r
 events %>% 
-  count(cand_fullname) %>% 
+  count(cand_lastname) %>% 
   arrange(desc(n))
 ```
 
     ## # A tibble: 24 x 2
-    ##    cand_fullname         n
-    ##    <chr>             <int>
-    ##  1 John Delaney          8
-    ##  2 Elizabeth Warren      7
-    ##  3 Eric Swalwell         7
-    ##  4 Kamala Harris         7
-    ##  5 Cory Booker           6
-    ##  6 Joe Biden             6
-    ##  7 Julian Castro         6
-    ##  8 Michael Bloomberg     6
-    ##  9 Beto O'Rourke         4
-    ## 10 John Hickenlooper     4
+    ##    cand_lastname     n
+    ##    <chr>         <int>
+    ##  1 Delaney           8
+    ##  2 Harris            7
+    ##  3 Swalwell          7
+    ##  4 Warren            7
+    ##  5 Biden             6
+    ##  6 Bloomberg         6
+    ##  7 Booker            6
+    ##  8 Castro            6
+    ##  9 Hickenlooper      4
+    ## 10 O'Rourke          4
     ## # ... with 14 more rows
 
 top states visited
@@ -1158,28 +1114,28 @@ events %>%
     ## 10 2019-01-30     3
     ## # ... with 33 more rows
 
-we can also group by **more than one** variable  
+we can also group by **more than one** variable
 which candidates have gone to which states?
 
 ``` r
 events %>% 
-  count(cand_fullname, state) %>% 
+  count(cand_lastname, state) %>% 
   arrange(state, desc(n))
 ```
 
     ## # A tibble: 72 x 3
-    ##    cand_fullname     state     n
-    ##    <chr>             <chr> <int>
-    ##  1 Howard Schultz    AZ        1
-    ##  2 John Hickenlooper CA        1
-    ##  3 Kamala Harris     CA        1
-    ##  4 Tom Steyer        CA        1
-    ##  5 Beto O'Rourke     CO        1
-    ##  6 Joe Biden         DC        3
-    ##  7 Bernie Sanders    DC        2
-    ##  8 John Hickenlooper DC        2
-    ##  9 Kamala Harris     DC        2
-    ## 10 Michael Bloomberg DC        2
+    ##    cand_lastname state     n
+    ##    <chr>         <chr> <int>
+    ##  1 Schultz       AZ        1
+    ##  2 Harris        CA        1
+    ##  3 Hickenlooper  CA        1
+    ##  4 Steyer        CA        1
+    ##  5 O'Rourke      CO        1
+    ##  6 Biden         DC        3
+    ##  7 Bloomberg     DC        2
+    ##  8 Harris        DC        2
+    ##  9 Hickenlooper  DC        2
+    ## 10 Sanders       DC        2
     ## # ... with 62 more rows
 
 what about the most frequent types of events
@@ -1214,39 +1170,37 @@ events %>%
     ## 19 organizing event, house party                1
     ## 20 talk show                                    1
 
-here we’re seeing some potentially dirty data that needs cleaning.  
-the event types seem to be inconsistently entered.  
-how might we standardize them? let’s take a look.
+here we're seeing some potentially dirty data that needs cleaning.
+the event types seem to be inconsistently entered.
+how might we standardize them? let's take a look.
 
-A function that returns a vector the same length as the input is called
-**vectorized**.  
+A function that returns a vector the same length as the input is called **vectorized**.
 \* `ifelse()`
 
-let’s see `ifelse()` in action
+let's see `ifelse()` in action
 
 ``` r
 events %>% 
   mutate(new_type = ifelse(event_type == "event speech", "TEST", event_type)) 
 ```
 
-    ## # A tibble: 88 x 14
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  3 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  4 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  5 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  6 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  7 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  8 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  9 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ## 10 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## # ... with 78 more rows, and 8 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>, year <dbl>,
-    ## #   month <dbl>, day <int>, new_type <chr>
+    ## # A tibble: 88 x 11
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  3 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  4 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  5 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  6 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  7 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  8 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  9 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ## 10 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## # ... with 78 more rows, and 5 more variables: description <chr>,
+    ## #   year <dbl>, month <dbl>, day <int>, new_type <chr>
 
-ok now let’s clean a few columns for real
+ok now let's clean a few columns for real
 
 ``` r
 events %>% 
@@ -1256,22 +1210,21 @@ events %>%
          ) 
 ```
 
-    ## # A tibble: 88 x 14
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  3 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  4 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  5 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  6 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  7 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  8 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  9 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ## 10 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## # ... with 78 more rows, and 8 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>, year <dbl>,
-    ## #   month <dbl>, day <int>, new_type <chr>
+    ## # A tibble: 88 x 11
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  3 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  4 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  5 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  6 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  7 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  8 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  9 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ## 10 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## # ... with 78 more rows, and 5 more variables: description <chr>,
+    ## #   year <dbl>, month <dbl>, day <int>, new_type <chr>
 
 this can start to get a little tedious though. enter `case_when`
 
@@ -1285,32 +1238,28 @@ events %>%
       ))
 ```
 
-    ## # A tibble: 88 x 14
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  3 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  4 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  5 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  6 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  7 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  8 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  9 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ## 10 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## # ... with 78 more rows, and 8 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>, year <dbl>,
-    ## #   month <dbl>, day <int>, new_type <chr>
+    ## # A tibble: 88 x 11
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  3 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  4 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  5 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  6 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  7 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  8 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  9 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ## 10 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## # ... with 78 more rows, and 5 more variables: description <chr>,
+    ## #   year <dbl>, month <dbl>, day <int>, new_type <chr>
 
-Of course, you may be asking: wouldn’t it be nice if we could
-standardize…  
-…based on certain keywords or patterns? Instead of spelling out every
-variation.
+Of course, you may be asking: wouldn't it be nice if we could standardize...
+...based on certain keywords or patterns? Instead of spelling out every variation.
 
-The answer is yes. Thanks to “string functions”…\!
+The answer is yes. Thanks to "string functions"...!
 
-We’ll show a quick example of what that looks like, and then start from
-the beginning in the next module.
+We'll show a quick example of what that looks like, and then start from the beginning in the next module.
 
 ``` r
 events %>%
@@ -1319,24 +1268,22 @@ events %>%
   )
 ```
 
-    ## # A tibble: 88 x 14
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  3 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  4 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  5 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  6 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  7 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  8 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  9 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ## 10 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## # ... with 78 more rows, and 8 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>, year <dbl>,
-    ## #   month <dbl>, day <int>, new_type <chr>
+    ## # A tibble: 88 x 11
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  3 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  4 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  5 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  6 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  7 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  8 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  9 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ## 10 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## # ... with 78 more rows, and 5 more variables: description <chr>,
+    ## #   year <dbl>, month <dbl>, day <int>, new_type <chr>
 
-We’ll take a closer look at string functions now using the stringr
-package.
+We'll take a closer look at string functions now using the stringr package.
 
-First, are there questions? Let’s discuss.
+First, are there questions? Let's discuss.
