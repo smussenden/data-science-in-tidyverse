@@ -187,9 +187,8 @@ events %>%
     )
   ) 
 
-#' notice that in the example above, the search for comma comes first, not last      
-
-
+#' notice that in the example above, the search for comma comes first, not last
+#'         
 
 #'### Joining Tables 
 

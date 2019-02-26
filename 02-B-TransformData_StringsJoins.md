@@ -389,5 +389,6 @@ events %>%
     ## # ... with 78 more rows
 
 notice that in the example above, the search for comma comes first, not
-last  
-\#\#\# Joining Tables
+last
+
+### Joining Tables
