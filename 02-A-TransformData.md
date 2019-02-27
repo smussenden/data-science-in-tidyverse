@@ -1,20 +1,21 @@
 Transforming Data, Part A
 ================
 
-Load the packages we'll need
+Load the packages we’ll
+    need
 
 ``` r
 library(tidyverse)
 ```
 
-    ## -- Attaching packages ---------------------------------------------------------------------------------------------------- tidyverse 1.2.1 --
+    ## -- Attaching packages ------------------------------------------------------ tidyverse 1.2.1 --
 
     ## v ggplot2 3.1.0       v purrr   0.3.0  
     ## v tibble  2.0.1       v dplyr   0.8.0.1
     ## v tidyr   0.8.2       v stringr 1.4.0  
     ## v readr   1.3.1       v forcats 0.4.0
 
-    ## -- Conflicts ------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
+    ## -- Conflicts --------------------------------------------------------- tidyverse_conflicts() --
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
@@ -29,7 +30,8 @@ library(lubridate)
     ## 
     ##     date
 
-Toy dataset to use, created manually with a tibble
+Toy dataset to use, created manually with a
+tibble
 
 ``` r
 pollution <- tibble(city=c("New York", "New York", "London", "London", "Beijing", "Beijing"),
@@ -37,10 +39,12 @@ pollution <- tibble(city=c("New York", "New York", "London", "London", "Beijing"
                amount=c(23, 14, 22, 16, 121, 56))
 ```
 
-*What are "tibbles"...?*
-They're dataframes, with some additional tidyverse-infused features. Returns more readable output in the console.
+*What are “tibbles”…?*  
+They’re dataframes, with some additional tidyverse-infused features.
+Returns more readable output in the console.
 
-Let's see the data we just created, you'll see how a tibble view differs in the console
+Let’s see the data we just created, you’ll see how a tibble view differs
+in the console
 
 ``` r
 pollution
@@ -56,7 +60,8 @@ pollution
     ## 5 Beijing  large    121
     ## 6 Beijing  small     56
 
-Since there are only a handful of rows, a bit harder to see - let's try the built-in "iris" data
+Since there are only a handful of rows, a bit harder to see - let’s try
+the built-in “iris” data
 
 ``` r
 iris
@@ -214,7 +219,7 @@ iris
     ## 149          6.2         3.4          5.4         2.3  virginica
     ## 150          5.9         3.0          5.1         1.8  virginica
 
-That was a lot of output! Can limit rows with head()
+That was a lot of output\! Can limit rows with head()
 
 ``` r
 head(iris)
@@ -228,7 +233,7 @@ head(iris)
     ## 5          5.0         3.6          1.4         0.2  setosa
     ## 6          5.4         3.9          1.7         0.4  setosa
 
-But let's see how tibbles differ in their output
+But let’s see how tibbles differ in their output
 
 ``` r
 as_tibble(iris)
@@ -251,9 +256,10 @@ as_tibble(iris)
 
 ### FILTERING AND SORTING
 
-The tidyverse's *dplyr* provides intuitive functions for exploring and analyzing dataframes
+The tidyverse’s *dplyr* provides intuitive functions for exploring and
+analyzing dataframes
 
-Let's go back to our little pollution dataset
+Let’s go back to our little pollution dataset
 
 ``` r
 pollution
@@ -269,7 +275,7 @@ pollution
     ## 5 Beijing  large    121
     ## 6 Beijing  small     56
 
-Show me only the ones with a "large" size
+Show me only the ones with a “large” size
 
 ``` r
 filter(pollution, size == "large")
@@ -319,7 +325,8 @@ filter(pollution, amount <= 22)
     ## 2 London   large     22
     ## 3 London   small     16
 
-Now, let's try filtering based on two different variables
+Now, let’s try filtering based on two different
+variables
 
 ``` r
 filter(pollution, amount > 20, size == "large") #'note the comma separating the filtering terms
@@ -332,13 +339,16 @@ filter(pollution, amount > 20, size == "large") #'note the comma separating the 
     ## 2 London   large     22
     ## 3 Beijing  large    121
 
-This can still get a little confusing once you wind up with larger amounts of steps to string together.
+This can still get a little confusing once you wind up with larger
+amounts of steps to string together.
 
 Enter a glorious feature of the tidyverse: **the PIPE** `%>%`
 
-The "pipe" (shortcut is CTRL/CMD + SHIFT + M) allows you to chain together commands
+The “pipe” (shortcut is CTRL/CMD + SHIFT + M) allows you to chain
+together commands
 
-Watch this, and see how much easier it becomes for a human to think through (and read later!)
+Watch this, and see how much easier it becomes for a human to think
+through (and read later\!)
 
 ``` r
 pollution %>% 
@@ -352,11 +362,14 @@ pollution %>%
     ## 2 London   large     22
     ## 3 Beijing  large    121
 
-Voila! So what just happened there?
-Think of %&gt;% as the equivalent of "and then do this"...
-It takes the result and then applies something new to it, in sequential order
+Voila\! So what just happened there?
 
-This becomes easy to see when we add new functions - let's talk about sorting with arrange()
+Think of %\>% as the equivalent of “and then do this”…  
+It takes the result and then applies something new to it, in sequential
+order
+
+This becomes easy to see when we add new functions - so let’s talk about
+sorting with arrange()
 
 ``` r
 pollution %>% 
@@ -390,7 +403,7 @@ pollution %>%
     ## 5 London   small     16
     ## 6 New York small     14
 
-Now let's go back to our filtering and add arranging, too
+Now let’s go back to our filtering and add arranging, too
 
 ``` r
 pollution %>% 
@@ -419,8 +432,9 @@ pollution %>%
     ## 1 New York large     23
     ## 2 London   large     22
 
-This can be formatted this way as well, if it's even easier for you to read
-Let's add another filter criteria
+This can be formatted this way as well, if it’s even easier for you to
+read  
+Let’s add another filter criteria
 
 ``` r
 pollution %>% 
@@ -436,20 +450,61 @@ pollution %>%
     ## 2 London   large     22
 
 Think about what we just did here.
-You can read the code and it intuitively makes sense.
+
+You can read the code and it intuitively makes sense.  
 Each step sequentially listed and executes in order.
+
+One more thing - what if we don’t want all the columns? Just some.  
+This happens all the time.
+
+Dplyr makes this easy using **select()\`**
+
+``` r
+pollution %>% 
+  select(city, amount)
+```
+
+    ## # A tibble: 6 x 2
+    ##   city     amount
+    ##   <chr>     <dbl>
+    ## 1 New York     23
+    ## 2 New York     14
+    ## 3 London       22
+    ## 4 London       16
+    ## 5 Beijing     121
+    ## 6 Beijing      56
+
+You can pull out just certain variables as well  
+This results in the same thing as above
+
+``` r
+pollution %>% 
+  select(-size)
+```
+
+    ## # A tibble: 6 x 2
+    ##   city     amount
+    ##   <chr>     <dbl>
+    ## 1 New York     23
+    ## 2 New York     14
+    ## 3 London       22
+    ## 4 London       16
+    ## 5 Beijing     121
+    ## 6 Beijing      56
 
 ### PRESIDENTIAL CANDIDATE TRIPS
 
-Let's take a look at some more intersting data now and try out some of these methods
+Let’s take a look at some more intersting data now and try out some of
+these methods
 
-Load in data of prez candidate campaign trips between midterms and end of Jan
+Load in data of prez candidate campaign trips between midterms and end
+of Jan
 
 ``` r
 events <- readRDS("events_saved.rds")
 ```
 
-Let's take a look at what we've got
+Let’s take a look at what we’ve got
 
 ``` r
 events
@@ -470,7 +525,7 @@ events
     ## 10 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
     ## # ... with 78 more rows, and 1 more variable: description <chr>
 
-Even easier to see a dataset with `View()`
+Even easier to see a dataset with `View()`  
 Click on its name under the environment tab in upper right, or:
 
 ``` r
@@ -484,9 +539,10 @@ events %>%
   view()
 ```
 
-Can you think of when we might find ourselves wanting to do that? (hint: think big)
+Can you think of when we might find ourselves wanting to do that? (hint:
+think big)
 
-Now let's try out some of our filtering and arranging techniques.
+Now let’s try out some of our filtering and arranging techniques.
 
 Show all events in Iowa:
 
@@ -536,8 +592,9 @@ events %>%
     ##   <date>     <chr>         <chr>         <chr> <chr> <chr>      <chr>      
     ## 1 2019-01-18 Kirsten       Gillibrand    Siou~ IA    organizin~ Organizing~
 
-Let's talk about **date-specific** stuff.
-If I have a properly formatted date in a dataframe, can I sort by it? *Yes.*
+Let’s talk about **date-specific** stuff.  
+If I have a properly formatted date in a dataframe, can I sort by it?
+*Yes.*
 
 ``` r
 events %>% 
@@ -560,7 +617,8 @@ events %>%
     ## 10 2019-01-09 Tom           Steyer        Des ~ IA    meet and ~
     ## # ... with 11 more rows, and 1 more variable: description <chr>
 
-What if I want to pull out only certain ranges of dates? *Several approaches.*
+What if I want to pull out only certain ranges of dates? *Several
+approaches.*  
 Specifiying a specific date using as.Date()
 
 ``` r
@@ -583,8 +641,10 @@ events %>%
     ## 10 2018-12-14 Eric          Swalwell      Manc~ NH    event spe~
     ## # ... with 17 more rows, and 1 more variable: description <chr>
 
-Take advantage of the LUBRIDATE package - a tidyverse package specifically for dates
-*Note: lubridate needs to be called separately at the top with library(lubridate) - it doesn't yet load with library(tidyverse)*
+Take advantage of the LUBRIDATE package - a tidyverse package
+specifically for dates  
+*Note: lubridate needs to be called separately at the top with
+library(lubridate) - it doesn’t yet load with library(tidyverse)*
 
 Now watch what we can do:
 
@@ -649,7 +709,8 @@ events %>%
     ## 5 2018-11-16 Deval         Patrick       Char~ SC    event spe~ keynote at~
     ## 6 2018-11-10 Eric          Swalwell      Des ~ IA    event spe~ Spoke with~
 
-Also allows us to do things like, "I only want to see events the *first week of every month*"
+Also allows us to do things like, “I only want to see events the *first
+week of every month*”
 
 ``` r
 events %>% 
@@ -671,7 +732,7 @@ events %>%
     ## 10 2018-12-01 Amy           Klobuchar     Perry IA    event spe~
     ## # ... with 1 more variable: description <chr>
 
-Who's visiting Iowa the first week of a month?
+Who’s visiting Iowa the first week of a month?
 
 ``` r
 events %>% 
@@ -688,14 +749,15 @@ events %>%
     ## 4 2018-12-02 John          Delaney       Siou~ IA    meet and ~ Meet and g~
     ## 5 2018-12-01 Amy           Klobuchar     Perry IA    event spe~ Iowa Farme~
 
-This is helpful but let's say you're doing this all the time.
+This is helpful but let’s say you’re doing this all the time.  
 It may be easier to create new columns to hold these values.
 
 Brings us to another key function of dpylr/tidyverse - **MUTATE**
 
 ### ADDING COLUMNS WITH MUTATE
 
-To add a column, you give it a name, then a single equal sign (=), then define what's in it.
+To add a column, you give it a name, then a single equal sign (=), then
+define what’s in it.  
 Test example:
 
 ``` r
@@ -740,7 +802,7 @@ events %>%
     ## # ... with 78 more rows, and 2 more variables: description <chr>,
     ## #   electioncycle <dbl>
 
-Now let's try adding our date-related columns. First we'll try year.
+Now let’s try adding our date-related columns. First we’ll try year.
 
 ``` r
 events %>% 
@@ -763,7 +825,8 @@ events %>%
     ## # ... with 78 more rows, and 2 more variables: description <chr>,
     ## #   year <dbl>
 
-We can add multiple columns as part of one mutate call. Let's do year, month and day in one swoop.
+We can add multiple columns as part of one mutate call. Let’s do year,
+month and day in one swoop.
 
 ``` r
 events %>% 
@@ -788,7 +851,8 @@ events %>%
     ## # ... with 78 more rows, and 4 more variables: description <chr>,
     ## #   year <dbl>, month <dbl>, day <int>
 
-This is a good time to remind ourselves that if we want to save our new columns, need to *create new object* or *overwrite*
+This is a good time to remind ourselves that if we want to save our new
+columns, need to *create new object* or *overwrite*
 
 ``` r
 events <- events %>% 
@@ -821,7 +885,7 @@ events %>%
     ## # ... with 51 more rows, and 4 more variables: description <chr>,
     ## #   year <dbl>, month <dbl>, day <int>
 
-Show me just Kamala's events in January
+Show me just Kamala’s events in January
 
 ``` r
 events %>% 
@@ -842,12 +906,15 @@ events %>%
 
 ### GROUPING AND AGGREGATING
 
-Able to aggregate our campaign trips would be helpful at this point, right?
-Let's get into how to do it using the tidyverse and dplyr's `group_by()` and `summarise()`
+Able to aggregate our campaign trips would be helpful at this point,
+right?  
+Let’s get into how to do it using the tidyverse and dplyr’s `group_by()`
+and `summarise()`
 
-Have you all grouped before in other languages? In base R itself? Let's discuss.
+Have you all grouped before in other languages? In base R itself? Let’s
+discuss.
 
-Grouping to see how many trips each candidate have been on in our data
+Grouping to see how many trips each candidate have been on in our data  
 Getting used to `n()`
 
 ``` r
@@ -871,7 +938,7 @@ events %>%
     ## 10 Gillibrand        2
     ## # ... with 14 more rows
 
-now let's add arrange to see who has the most trips
+now let’s add arrange to see who has the most trips
 
 ``` r
 # (not run)  
@@ -881,7 +948,8 @@ now let's add arrange to see who has the most trips
 #   arrange(n)
 ```
 
-hmm - what's going on here? Look closely and see what the generated count column is called
+hmm - what’s going on here? Look closely and see what the generated
+count column is called
 
 ``` r
 # events %>% 
@@ -890,7 +958,7 @@ hmm - what's going on here? Look closely and see what the generated count column
 #   arrange("n()")
 ```
 
-that doesn't work either. What about this.
+that doesn’t work either. What about this.
 
 ``` r
 events %>% 
@@ -923,8 +991,8 @@ Ah - so that sort of works? But not really, how do we get desc
 #   arrange(desc)
 ```
 
-Oy - this is getting frustrating. How do we solve?
-By doing this: giving the new column a name of our own.
+Oy - this is getting frustrating. How do we solve?  
+By doing this: giving the new column a name of our own.  
 Check it out:
 
 ``` r
@@ -972,8 +1040,9 @@ events %>%
     ## 10 O'Rourke          4
     ## # ... with 14 more rows
 
-Bingo
-We can call the new columnn anything we want. "n" is a common thing for counts,
+Bingo  
+We can call the new columnn anything we want. “n” is a common thing for
+counts,  
 but can be anything
 
 ``` r
@@ -998,9 +1067,11 @@ events %>%
     ## 10 O'Rourke             4
     ## # ... with 14 more rows
 
-Now for the magic
-Because this counting is such a common operation, and because the `n()` becomes a pain to deal with...
-...there is a special shortcut that we can use that collapses everything into one function
+Now for the magic  
+Because this counting is such a common operation, and because the `n()`
+becomes a pain to deal with…  
+…there is a special shortcut that we can use that collapses everything
+into one function
 
 ``` r
 events %>% 
@@ -1114,7 +1185,7 @@ events %>%
     ## 10 2019-01-30     3
     ## # ... with 33 more rows
 
-we can also group by **more than one** variable
+we can also group by **more than one** variable  
 which candidates have gone to which states?
 
 ``` r
@@ -1170,14 +1241,15 @@ events %>%
     ## 19 organizing event, house party                1
     ## 20 talk show                                    1
 
-here we're seeing some potentially dirty data that needs cleaning.
-the event types seem to be inconsistently entered.
-how might we standardize them? let's take a look.
+here we’re seeing some potentially dirty data that needs cleaning.  
+the event types seem to be inconsistently entered.  
+how might we standardize them? let’s take a look.
 
-A function that returns a vector the same length as the input is called **vectorized**.
+A function that returns a vector the same length as the input is called
+**vectorized**.  
 \* `ifelse()`
 
-let's see `ifelse()` in action
+let’s see `ifelse()` in action
 
 ``` r
 events %>% 
@@ -1200,7 +1272,7 @@ events %>%
     ## # ... with 78 more rows, and 5 more variables: description <chr>,
     ## #   year <dbl>, month <dbl>, day <int>, new_type <chr>
 
-ok now let's clean a few columns for real
+ok now let’s clean a few columns for real
 
 ``` r
 events %>% 
@@ -1254,12 +1326,15 @@ events %>%
     ## # ... with 78 more rows, and 5 more variables: description <chr>,
     ## #   year <dbl>, month <dbl>, day <int>, new_type <chr>
 
-Of course, you may be asking: wouldn't it be nice if we could standardize...
-...based on certain keywords or patterns? Instead of spelling out every variation.
+Of course, you may be asking: wouldn’t it be nice if we could
+standardize…  
+…based on certain keywords or patterns? Instead of spelling out every
+variation.
 
-The answer is yes. Thanks to "string functions"...!
+The answer is yes. Thanks to “string functions”…\!
 
-We'll show a quick example of what that looks like, and then start from the beginning in the next module.
+We’ll show a quick example of what that looks like, and then start from
+the beginning in the next module.
 
 ``` r
 events %>%
@@ -1284,6 +1359,7 @@ events %>%
     ## # ... with 78 more rows, and 5 more variables: description <chr>,
     ## #   year <dbl>, month <dbl>, day <int>, new_type <chr>
 
-We'll take a closer look at string functions now using the stringr package.
+We’ll take a closer look at string functions now using the stringr
+package.
 
-First, are there questions? Let's discuss.
+First, are there questions? Let’s discuss.

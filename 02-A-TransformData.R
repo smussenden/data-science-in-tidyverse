@@ -65,11 +65,12 @@ pollution %>%
   filter(size == "large")
 
 #'Voila! So what just happened there?  
+#'  
 #'Think of %>% as the equivalent of "and then do this"...  
-#'It takes the result and then applies something new to it, in sequential order  
+##'It takes the result and then applies something new to it, in sequential order  
 #'  
 
-#'This becomes easy to see when we add new functions - let's talk about sorting with arrange()
+#'This becomes easy to see when we add new functions - so let's talk about sorting with arrange()
 pollution %>% 
   arrange(amount)
 
@@ -95,10 +96,25 @@ pollution %>%
   arrange(desc(amount))
 
 #'Think about what we just did here.  
+#'  
 #'You can read the code and it intuitively makes sense.   
 #'Each step sequentially listed and executes in order.  
 #'  
 #'  
+
+#' One more thing - what if we don't want all the columns? Just some.  
+#' This happens all the time.
+#' 
+#' Dplyr makes this easy using **select()`**
+#'   
+pollution %>% 
+  select(city, amount)
+
+#' You can pull out just certain variables as well  
+#' This results in the same thing as above
+pollution %>% 
+  select(-size)
+
 
 #'### PRESIDENTIAL CANDIDATE TRIPS  
 #'  
@@ -233,6 +249,7 @@ events %>%
 #'   
 #' Grouping to see how many trips each candidate have been on in our data  
 #' Getting used to `n()`
+
 events %>% 
   group_by(cand_lastname) %>% 
   summarise(n())
@@ -251,6 +268,7 @@ events %>%
 #   arrange("n()")
 
 #' that doesn't work either.  What about this.
+
 events %>% 
   group_by(cand_lastname) %>% 
   summarise(n()) %>% 
@@ -265,11 +283,13 @@ events %>%
 #' Oy - this is getting frustrating. How do we solve?  
 #' By doing this: giving the new column a name of our own.  
 #' Check it out:
+
 events %>% 
   group_by(cand_lastname) %>% 
   summarise(n = n()) 
 
 #' Now we can do:
+
 events %>% 
   group_by(cand_lastname) %>% 
   summarise(n = n()) %>% 
@@ -278,6 +298,7 @@ events %>%
 #' Bingo  
 #' We can call the new columnn anything we want. "n" is a common thing for counts,  
 #' but can be anything
+
 events %>% 
   group_by(cand_lastname) %>% 
   summarise(numtrips = n()) %>% 
@@ -286,6 +307,7 @@ events %>%
 #' Now for the magic  
 #' Because this counting is such a common operation, and because the `n()` becomes a pain to deal with...  
 #' ...there is a special shortcut that we can use that collapses everything into one function
+
 events %>% 
   count(cand_lastname)
 
@@ -294,27 +316,32 @@ events %>%
   arrange(desc(n))
 
 #' top states visited
+
 events %>% 
   count(state) %>% 
   arrange(desc(n))
 
 #' top months
+
 events %>% 
   count(month) %>% 
   arrange(desc(n))
 
 #' top single day for most trips
+
 events %>% 
   count(date) %>% 
   arrange(desc(n))
 
 #' we can also group by **more than one** variable  
 #' which candidates have gone to which states?
+
 events %>% 
   count(cand_lastname, state) %>% 
   arrange(state, desc(n))
 
 #' what about the most frequent types of events
+
 events %>% 
   count(event_type) %>% 
   arrange(desc(n))
@@ -327,10 +354,12 @@ events %>%
 #' * `ifelse()`  
 #'   
 #' let's see `ifelse()` in action
+
 events %>% 
   mutate(new_type = ifelse(event_type == "event speech", "TEST", event_type)) 
 
 #' ok now let's clean a few columns for real
+
 events %>% 
   mutate(new_type = ifelse(event_type == "campaign event", "event", event_type),
          new_type = ifelse(event_type == "campaign events", "event", new_type),
@@ -338,6 +367,7 @@ events %>%
          ) 
 
 #' this can start to get a little tedious though. enter `case_when`
+
 events %>%
   mutate(new_type = case_when(
             event_type == "campaign event" ~ "event",
@@ -352,6 +382,7 @@ events %>%
 #' The answer is yes. Thanks to "string functions"...!  
 #'   
 #' We'll show a quick example of what that looks like, and then start from the beginning in the next module.  
+
 events %>%
   mutate(new_type = case_when(
     str_detect(event_type, "event") ~ "event")
