@@ -1,7 +1,7 @@
 #'---
 #'title: "Transforming Data, Part B"
-#'author:
-#'date:
+#'author: 
+#'date: "NICAR 2019"
 #'output: github_document
 #'---
 
@@ -495,7 +495,7 @@ joined %>%
 #'   
 #' More details at https://dplyr.tidyverse.org/reference/group_by_all.html  
 #'   
-#' We're not going to go into it for this session - mainly because I haven't even explored it myself yet.
+#' We're not going to go into it for this session - mainly because I haven't even explored it myself yet. But look forward to!
 
 
 

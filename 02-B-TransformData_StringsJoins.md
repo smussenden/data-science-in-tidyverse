@@ -1,5 +1,6 @@
 Transforming Data, Part B
 ================
+NICAR 2019
 
 load the packages we'll need
 
@@ -1193,4 +1194,4 @@ Finally, hot of the presses: just released in the **new version** of dplyr, 0.8.
 
 More details at <https://dplyr.tidyverse.org/reference/group_by_all.html>
 
-We're not going to go into it for this session - mainly because I haven't even explored it myself yet.
+We're not going to go into it for this session - mainly because I haven't even explored it myself yet. But look forward to!
