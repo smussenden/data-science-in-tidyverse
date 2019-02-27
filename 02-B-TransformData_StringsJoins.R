@@ -299,3 +299,61 @@ joined <- key_house_results %>%
 #' Let's explore our new joined table using what we've learned so far
 
 glimpse(joined)
+
+#' What kinds of questions can we ask, using our dplyr functions? Lots of choices!
+#'   
+#' Let's start out by getting some aggregate counts  
+#' How many key races were there?
+
+joined %>% 
+  count(keyrace_rating)
+
+#' How many did each party win?
+
+joined %>% 
+  count(keyrace_rating, winner)
+
+#' How many of those wins were flips?
+joined %>% 
+  filter(!is.na(keyrace_rating)) %>% 
+  count(winner, flips)
+
+#' Wait a sec, what was that with the `!is.na()`?  
+#' You can reverse certain functions like `is.na()` - returning only NA rows - by adding a `!` before it.  
+#' Just like with `!=`  
+#'   
+#' Now let's examine just the flipped districts
+
+flipped <- joined %>% 
+  filter(flips == "Y") 
+
+flipped
+
+#' *Note: this data is for training purposes only. A few actual results affecting flips aren't reflected here.*  
+#' Now we can start asking some questions about the nature of the flipped districts:
+
+flipped %>% 
+  count(winner)
+
+#' Quite a lopsided result in favor of the Dems.  
+#' How many flipped districts were above vs. below the national average pct of college grads
+
+flipped %>% 
+  count(winner, pct_college_abovebelow_natl)
+
+#' How many flipped districts were above vs. below the the national median income figure
+
+flipped %>% 
+  count(winner, median_income_abovebelow_natl)
+
+#' Interesting!  
+#'   
+#'   
+#' Let's do some calculating.  
+#' What was the *average margin of victory* for Dems in flipped districts?
+
+flipped %>% 
+  filter(winner == "D") %>% 
+  summarise(mean(margin))
+
+# summarise_at ???

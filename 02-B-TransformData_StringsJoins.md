@@ -698,3 +698,151 @@ glimpse(joined)
     ## $ prez_winner_2016              <chr> "R", "D", "R", "R", "D", "R", "R...
     ## $ trump_vote_pct                <dbl> 47.0, 43.9, 51.6, 57.1, 37.6, 52...
     ## $ clinton_vote_pct              <dbl> 46.0, 48.7, 41.7, 36.4, 53.5, 41...
+
+What kinds of questions can we ask, using our dplyr functions? Lots of choices!
+
+Let's start out by getting some aggregate counts
+How many key races were there?
+
+``` r
+joined %>% 
+  count(keyrace_rating)
+```
+
+    ## # A tibble: 6 x 2
+    ##   keyrace_rating        n
+    ##   <chr>             <int>
+    ## 1 lean democratic      15
+    ## 2 lean republican      22
+    ## 3 likely democratic     6
+    ## 4 likely republican    22
+    ## 5 NA                    8
+    ## 6 tossup               31
+
+How many did each party win?
+
+``` r
+joined %>% 
+  count(keyrace_rating, winner)
+```
+
+    ## # A tibble: 10 x 3
+    ##    keyrace_rating    winner     n
+    ##    <chr>             <chr>  <int>
+    ##  1 lean democratic   D         15
+    ##  2 lean republican   D          4
+    ##  3 lean republican   R         18
+    ##  4 likely democratic D          6
+    ##  5 likely republican D          1
+    ##  6 likely republican R         21
+    ##  7 NA                D          4
+    ##  8 NA                R          4
+    ##  9 tossup            D         22
+    ## 10 tossup            R          9
+
+How many of those wins were flips?
+
+``` r
+joined %>% 
+  filter(!is.na(keyrace_rating)) %>% 
+  count(winner, flips)
+```
+
+    ## # A tibble: 4 x 3
+    ##   winner flips     n
+    ##   <chr>  <chr> <int>
+    ## 1 D      N        10
+    ## 2 D      Y        42
+    ## 3 R      N        50
+    ## 4 R      Y         2
+
+Wait a sec, what was that with the `!is.na()`?
+You can reverse certain functions like `is.na()` - returning only NA rows - by adding a `!` before it.
+Just like with `!=`
+
+Now let's examine just the flipped districts
+
+``` r
+flipped <- joined %>% 
+  filter(flips == "Y") 
+
+flipped
+```
+
+    ## # A tibble: 44 x 15
+    ##    house_dist keyrace_rating flips dem_vote_pct gop_vote_pct winner margin
+    ##    <chr>      <chr>          <chr>        <dbl>        <dbl> <chr>   <dbl>
+    ##  1 AZ-02      likely democr~ Y             54.7         45.3 D         9.4
+    ##  2 CA-10      tossup         Y             52.3         47.7 D         4.6
+    ##  3 CA-21      likely republ~ Y             50.4         49.6 D         0.8
+    ##  4 CA-25      tossup         Y             54.4         45.6 D         8.8
+    ##  5 CA-39      tossup         Y             51.6         48.4 D         3.2
+    ##  6 CA-45      tossup         Y             52.1         47.9 D         4.2
+    ##  7 CA-48      tossup         Y             53.6         46.4 D         7.2
+    ##  8 CA-49      lean democrat~ Y             56.4         43.6 D        12.8
+    ##  9 CO-06      lean democrat~ Y             54.1         42.9 D        11.2
+    ## 10 FL-26      tossup         Y             50.9         49.1 D         1.8
+    ## # ... with 34 more rows, and 8 more variables: former_party <chr>,
+    ## #   pct_college <dbl>, pct_college_abovebelow_natl <chr>,
+    ## #   median_income <dbl>, median_income_abovebelow_natl <chr>,
+    ## #   prez_winner_2016 <chr>, trump_vote_pct <dbl>, clinton_vote_pct <dbl>
+
+*Note: this data is for training purposes only. A few actual results affecting flips aren't reflected here.*
+Now we can start asking some questions about the nature of the flipped districts:
+
+``` r
+flipped %>% 
+  count(winner)
+```
+
+    ## # A tibble: 2 x 2
+    ##   winner     n
+    ##   <chr>  <int>
+    ## 1 D         42
+    ## 2 R          2
+
+Quite a lopsided result in favor of the Dems.
+How many flipped districts were above vs. below the national average pct of college grads
+
+``` r
+flipped %>% 
+  count(winner, pct_college_abovebelow_natl)
+```
+
+    ## # A tibble: 3 x 3
+    ##   winner pct_college_abovebelow_natl     n
+    ##   <chr>  <chr>                       <int>
+    ## 1 D      ABOVE                          31
+    ## 2 D      BELOW                          11
+    ## 3 R      BELOW                           2
+
+How many flipped districts were above vs. below the the national median income figure
+
+``` r
+flipped %>% 
+  count(winner, median_income_abovebelow_natl)
+```
+
+    ## # A tibble: 4 x 3
+    ##   winner median_income_abovebelow_natl     n
+    ##   <chr>  <chr>                         <int>
+    ## 1 D      ABOVE                            35
+    ## 2 D      BELOW                             7
+    ## 3 R      ABOVE                             1
+    ## 4 R      BELOW                             1
+
+Interesting!
+
+Let's do some calculating.
+What was the *average margin of victory* for Dems in flipped districts?
+
+``` r
+flipped %>% 
+  filter(winner == "D") %>% 
+  summarise(mean(margin))
+```
+
+    ## # A tibble: 1 x 1
+    ##   `mean(margin)`
+    ##            <dbl>
+    ## 1           6.62
