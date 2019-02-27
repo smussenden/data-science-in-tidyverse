@@ -377,6 +377,57 @@ flipped %>%
 
 #' ### Scoped dplyr functions
 #'   
-#' asdf
+#' The idea behind scoped functions: variations on the dplyr commands we've used, but designed to apply to multiple variables.
+#'   
+#' They generally end with `'_all`, `_at`, and `_if` ... e.g. `summarise_if()`  
+#'   
+#' Let's take a look back at our election data. We could do something like this:
+
+flipped %>% 
+  group_by(winner) %>% 
+  summarise(mean(margin), 
+            mean(pct_college),
+            mean(median_income))
+
+#' Or, we could use a scoped function. Here, we'll use `summarise_at()` - designed for when you know specific columns you want. 
+
+flipped %>% 
+  group_by(winner) %>% 
+  summarise_at(vars(margin, pct_college, median_income), mean)
+
+#' Sweet, right? That was a lot easier.  
+#' Notice the use of `vars()` above - this is needed when specifying multiple variables.  
+#' The columns/variables you want go in `vars()`, followed by the function to apply to them.  
+#'   
+#' We can even apply *more than one* function at a time:
+
+flipped %>% 
+  group_by(winner) %>% 
+  summarise_at(vars(margin, pct_college, median_income), c(avg = mean, med = median))
+
+#' We can also group by more than one variable, like below where we look at the entire set of races not just flips.
+
+joined %>% 
+  group_by(flips, winner) %>% 
+  summarise_at(vars(margin, pct_college, median_income), mean)
+
+#' Notice something a little odd with the results? We're getting some NAs.  
+#' Since `mean()` breaks when there are NA values, we need to fix that.
+
+joined %>% 
+  group_by(flips, winner) %>% 
+  summarise_at(vars(margin, pct_college, median_income), mean, na.rm = TRUE)
+
+#' We can even create our own custom functions (won't get into that in this session, though).  
+#'   
+#' Now what if we wanted to apply our mean to every column in the data? 
+
+flipped %>% 
+  group_by(winner) %>% 
+  summarise_all(mean)
+
+#' 
+
+names(flipped)
 
 # summarise_at ???

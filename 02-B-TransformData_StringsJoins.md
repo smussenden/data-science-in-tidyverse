@@ -883,7 +883,169 @@ Yes, let's talk about *scoped functions*.
 
 ### Scoped dplyr functions
 
-asdf
+The idea behind scoped functions: variations on the dplyr commands we've used, but designed to apply to multiple variables.
+
+They generally end with `'_all`, `_at`, and `_if` ... e.g. `summarise_if()`
+
+Let's take a look back at our election data. We could do something like this:
+
+``` r
+flipped %>% 
+  group_by(winner) %>% 
+  summarise(mean(margin), 
+            mean(pct_college),
+            mean(median_income))
+```
+
+    ## # A tibble: 2 x 4
+    ##   winner `mean(margin)` `mean(pct_college)` `mean(median_income)`
+    ##   <chr>           <dbl>               <dbl>                 <dbl>
+    ## 1 D                6.62                36.8                70130.
+    ## 2 R                2.95                25.0                54732
+
+Or, we could use a scoped function. Here, we'll use `summarise_at()` - designed for when you know specific columns you want.
+
+``` r
+flipped %>% 
+  group_by(winner) %>% 
+  summarise_at(vars(margin, pct_college, median_income), mean)
+```
+
+    ## # A tibble: 2 x 4
+    ##   winner margin pct_college median_income
+    ##   <chr>   <dbl>       <dbl>         <dbl>
+    ## 1 D        6.62        36.8        70130.
+    ## 2 R        2.95        25.0        54732
+
+Sweet, right? That was a lot easier.
+Notice the use of `vars()` above - this is needed when specifying multiple variables.
+The columns/variables you want go in `vars()`, followed by the function to apply to them.
+
+We can even apply *more than one* function at a time:
+
+``` r
+flipped %>% 
+  group_by(winner) %>% 
+  summarise_at(vars(margin, pct_college, median_income), c(avg = mean, med = median))
+```
+
+    ## # A tibble: 2 x 7
+    ##   winner margin_avg pct_college_avg median_income_a~ margin_med
+    ##   <chr>       <dbl>           <dbl>            <dbl>      <dbl>
+    ## 1 D            6.62            36.8           70130.       5.15
+    ## 2 R            2.95            25.0           54732        2.95
+    ## # ... with 2 more variables: pct_college_med <dbl>,
+    ## #   median_income_med <dbl>
+
+We can also group by more than one variable, like below where we look at the entire set of races not just flips.
+
+``` r
+joined %>% 
+  group_by(flips, winner) %>% 
+  summarise_at(vars(margin, pct_college, median_income), mean)
+```
+
+    ## # A tibble: 4 x 5
+    ## # Groups:   flips [2]
+    ##   flips winner margin pct_college median_income
+    ##   <chr> <chr>   <dbl>       <dbl>         <dbl>
+    ## 1 N     D       NA           29.2        57498.
+    ## 2 N     R       NA           29.0        55807.
+    ## 3 Y     D        6.62        36.8        70130.
+    ## 4 Y     R        2.95        25.0        54732
+
+Notice something a little odd with the results? We're getting some NAs.
+Since `mean()` breaks when there are NA values, we need to fix that.
+
+``` r
+joined %>% 
+  group_by(flips, winner) %>% 
+  summarise_at(vars(margin, pct_college, median_income), mean, na.rm = TRUE)
+```
+
+    ## # A tibble: 4 x 5
+    ## # Groups:   flips [2]
+    ##   flips winner margin pct_college median_income
+    ##   <chr> <chr>   <dbl>       <dbl>         <dbl>
+    ## 1 N     D       10.8         29.2        57498.
+    ## 2 N     R        6.53        29.0        55807.
+    ## 3 Y     D        6.62        36.8        70130.
+    ## 4 Y     R        2.95        25.0        54732
+
+We can even create our own custom functions (won't get into that in this session, though).
+
+Now what if we wanted to apply our mean to every column in the data?
+
+``` r
+flipped %>% 
+  group_by(winner) %>% 
+  summarise_all(mean)
+```
+
+    ## Warning in mean.default(house_dist): argument is not numeric or logical:
+    ## returning NA
+
+    ## Warning in mean.default(house_dist): argument is not numeric or logical:
+    ## returning NA
+
+    ## Warning in mean.default(keyrace_rating): argument is not numeric or
+    ## logical: returning NA
+
+    ## Warning in mean.default(keyrace_rating): argument is not numeric or
+    ## logical: returning NA
+
+    ## Warning in mean.default(flips): argument is not numeric or logical:
+    ## returning NA
+
+    ## Warning in mean.default(flips): argument is not numeric or logical:
+    ## returning NA
+
+    ## Warning in mean.default(former_party): argument is not numeric or logical:
+    ## returning NA
+
+    ## Warning in mean.default(former_party): argument is not numeric or logical:
+    ## returning NA
+
+    ## Warning in mean.default(pct_college_abovebelow_natl): argument is not
+    ## numeric or logical: returning NA
+
+    ## Warning in mean.default(pct_college_abovebelow_natl): argument is not
+    ## numeric or logical: returning NA
+
+    ## Warning in mean.default(median_income_abovebelow_natl): argument is not
+    ## numeric or logical: returning NA
+
+    ## Warning in mean.default(median_income_abovebelow_natl): argument is not
+    ## numeric or logical: returning NA
+
+    ## Warning in mean.default(prez_winner_2016): argument is not numeric or
+    ## logical: returning NA
+
+    ## Warning in mean.default(prez_winner_2016): argument is not numeric or
+    ## logical: returning NA
+
+    ## # A tibble: 2 x 15
+    ##   winner house_dist keyrace_rating flips dem_vote_pct gop_vote_pct margin
+    ##   <chr>       <dbl>          <dbl> <dbl>        <dbl>        <dbl>  <dbl>
+    ## 1 D              NA             NA    NA         52.9         46.3   6.62
+    ## 2 R              NA             NA    NA         47.5         50.4   2.95
+    ## # ... with 8 more variables: former_party <dbl>, pct_college <dbl>,
+    ## #   pct_college_abovebelow_natl <dbl>, median_income <dbl>,
+    ## #   median_income_abovebelow_natl <dbl>, prez_winner_2016 <dbl>,
+    ## #   trump_vote_pct <dbl>, clinton_vote_pct <dbl>
+
+``` r
+names(flipped)
+```
+
+    ##  [1] "house_dist"                    "keyrace_rating"               
+    ##  [3] "flips"                         "dem_vote_pct"                 
+    ##  [5] "gop_vote_pct"                  "winner"                       
+    ##  [7] "margin"                        "former_party"                 
+    ##  [9] "pct_college"                   "pct_college_abovebelow_natl"  
+    ## [11] "median_income"                 "median_income_abovebelow_natl"
+    ## [13] "prez_winner_2016"              "trump_vote_pct"               
+    ## [15] "clinton_vote_pct"
 
 ``` r
 # summarise_at ???
