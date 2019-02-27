@@ -353,7 +353,30 @@ flipped %>%
 #' What was the *average margin of victory* for Dems in flipped districts?
 
 flipped %>% 
-  filter(winner == "D") %>% 
+  group_by(winner) %>% 
   summarise(mean(margin))
+
+#' Maybe there are some other variables of which we might want to see averages
+
+flipped %>% 
+  group_by(winner) %>% 
+  summarise(mean(pct_college))
+
+#' Could we do both of them at the same time? We can, like this:
+
+flipped %>% 
+  group_by(winner) %>% 
+  summarise(mean(margin), mean(pct_college))
+
+#' Hmm, this isn't bad but what if we had five columns, or ten?  
+#' Is there an easier way?  
+#'   
+#' Yes, let's talk about *scoped functions*.
+#'  
+#'    
+
+#' ### Scoped dplyr functions
+#'   
+#' asdf
 
 # summarise_at ???

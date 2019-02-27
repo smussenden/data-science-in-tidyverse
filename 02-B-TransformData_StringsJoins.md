@@ -838,11 +838,53 @@ What was the *average margin of victory* for Dems in flipped districts?
 
 ``` r
 flipped %>% 
-  filter(winner == "D") %>% 
+  group_by(winner) %>% 
   summarise(mean(margin))
 ```
 
-    ## # A tibble: 1 x 1
-    ##   `mean(margin)`
-    ##            <dbl>
-    ## 1           6.62
+    ## # A tibble: 2 x 2
+    ##   winner `mean(margin)`
+    ##   <chr>           <dbl>
+    ## 1 D                6.62
+    ## 2 R                2.95
+
+Maybe there are some other variables of which we might want to see averages
+
+``` r
+flipped %>% 
+  group_by(winner) %>% 
+  summarise(mean(pct_college))
+```
+
+    ## # A tibble: 2 x 2
+    ##   winner `mean(pct_college)`
+    ##   <chr>                <dbl>
+    ## 1 D                     36.8
+    ## 2 R                     25.0
+
+Could we do both of them at the same time? We can, like this:
+
+``` r
+flipped %>% 
+  group_by(winner) %>% 
+  summarise(mean(margin), mean(pct_college))
+```
+
+    ## # A tibble: 2 x 3
+    ##   winner `mean(margin)` `mean(pct_college)`
+    ##   <chr>           <dbl>               <dbl>
+    ## 1 D                6.62                36.8
+    ## 2 R                2.95                25.0
+
+Hmm, this isn't bad but what if we had five columns, or ten?
+Is there an easier way?
+
+Yes, let's talk about *scoped functions*.
+
+### Scoped dplyr functions
+
+asdf
+
+``` r
+# summarise_at ???
+```
