@@ -249,7 +249,17 @@ events %>%
 
 #'### Joining Tables 
 
+#' One of the most powerful things about relational data being able to join tables together.  
+#'   
+#' Let's take a look at how to do that with dpylr and the tidyverse.  
+#'   
+#' First, let's bring in some new data:
 
+key_house_results <- readRDS("key_house_results.rds") 
+key_house_historical <- readRDS("key_house_historical.rds") 
 
+#' What do we have here? Let's take a look and discuss.
+#'   
+#'   
 
 
