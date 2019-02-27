@@ -1034,18 +1034,46 @@ flipped %>%
     ## #   median_income_abovebelow_natl <dbl>, prez_winner_2016 <dbl>,
     ## #   trump_vote_pct <dbl>, clinton_vote_pct <dbl>
 
+We got a lot of warnings there. What happened?
+You can't calculate a mean on a text column, only a numeric one.
+
+Enter `summarise_if()`.
+
 ``` r
-names(flipped)
+flipped %>% 
+  group_by(winner) %>% 
+  summarise_if(is.numeric, mean)
 ```
 
-    ##  [1] "house_dist"                    "keyrace_rating"               
-    ##  [3] "flips"                         "dem_vote_pct"                 
-    ##  [5] "gop_vote_pct"                  "winner"                       
-    ##  [7] "margin"                        "former_party"                 
-    ##  [9] "pct_college"                   "pct_college_abovebelow_natl"  
-    ## [11] "median_income"                 "median_income_abovebelow_natl"
-    ## [13] "prez_winner_2016"              "trump_vote_pct"               
-    ## [15] "clinton_vote_pct"
+    ## # A tibble: 2 x 8
+    ##   winner dem_vote_pct gop_vote_pct margin pct_college median_income
+    ##   <chr>         <dbl>        <dbl>  <dbl>       <dbl>         <dbl>
+    ## 1 D              52.9         46.3   6.62        36.8        70130.
+    ## 2 R              47.5         50.4   2.95        25.0        54732 
+    ## # ... with 2 more variables: trump_vote_pct <dbl>, clinton_vote_pct <dbl>
+
+Now we're talking.
+
+Though if we look closely, there are some columns we may decide aren't we want.
+Let's say we don't want to averages of vote percentages for our analysis.
+We could see if there's a pattern to their names? There is, so we can use a \`select()\`\` helper function.
+
+``` r
+flipped %>% 
+  select(-ends_with("vote_pct")) %>% 
+  group_by(winner) %>% 
+  summarise_if(is.numeric, mean)
+```
+
+    ## # A tibble: 2 x 4
+    ##   winner margin pct_college median_income
+    ##   <chr>   <dbl>       <dbl>         <dbl>
+    ## 1 D        6.62        36.8        70130.
+    ## 2 R        2.95        25.0        54732
+
+Perfect.
+
+We're not going to get into all the helper functions, but they are very useful and you can find more about them at <https://www.rdocumentation.org/packages/dplyr/versions/0.7.2/topics/select_helpers>
 
 ``` r
 # summarise_at ???

@@ -426,8 +426,36 @@ flipped %>%
   group_by(winner) %>% 
   summarise_all(mean)
 
+#' We got a lot of warnings there. What happened?  
+#' You can't calculate a mean on a text column, only a numeric one.  
+#'   
+#'   
+#' Enter `summarise_if()`.
+
+flipped %>% 
+  group_by(winner) %>% 
+  summarise_if(is.numeric, mean)
+
+#' Now we're talking.  
+#'   
+#' Though if we look closely, there are some columns we may decide aren't we want.  
+#' Let's say we don't want to averages of vote percentages for our analysis.  
+#' We could see if there's a pattern to their names? There is, so we can use a `select()`` helper function.
+
+flipped %>% 
+  select(-ends_with("vote_pct")) %>% 
+  group_by(winner) %>% 
+  summarise_if(is.numeric, mean)
+
+#' Perfect. 
+#'   
+#' We're not going to get into all the select helper functions, but they are very useful; you can read more about them at https://www.rdocumentation.org/packages/dplyr/versions/0.7.2/topics/select_helpers
 #' 
 
-names(flipped)
 
-# summarise_at ???
+
+
+
+
+
+
