@@ -449,8 +449,47 @@ flipped %>%
 
 #' Perfect. 
 #'   
-#' We're not going to get into all the select helper functions, but they are very useful; you can read more about them at https://www.rdocumentation.org/packages/dplyr/versions/0.7.2/topics/select_helpers
+#' We're not going to get into all the select helper functions, but they are very useful,  
+#' You can read more about them at https://www.rdocumentation.org/packages/dplyr/versions/0.7.2/topics/select_helpers
+#'   
+
+#' Such scoped versions also exist for other dplyr functions.  
+#' Let's take a quick look at `mutate_at()`.
+# mutate_at(vars(x, y, z), .funs, ...)
+#' Perhaps we want to format the percentages as text because a web app using the data is having trouble displaying numerics (this generally can be handled by app code but let's say it can't for whatever reason).  
 #' 
+
+
+
+joined %>% 
+  select(dem_vote_pct, 
+         gop_vote_pct,
+         pct_college,
+         trump_vote_pct,
+         clinton_vote_pct) %>% 
+  mutate_at(vars(dem_vote_pct, 
+                 gop_vote_pct,
+                 pct_college,
+                 trump_vote_pct,
+                 clinton_vote_pct), 
+            as.character)
+
+#' You can also create new columns just as you do with mutate
+
+joined %>% 
+  select(dem_vote_pct, 
+         gop_vote_pct) %>% 
+  mutate_at(vars(dem_vote_char = dem_vote_pct, 
+                 gop_vote_char = gop_vote_pct), 
+            as.character)
+
+#' To mutate certain columns based on criteria, we use `mutate_if()`
+
+joined %>% 
+  mutate_if(is.character, str_to_lower)
+
+joined %>% 
+  mutate_if(is.character, str_to_title)
 
 
 

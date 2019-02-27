@@ -1073,8 +1073,118 @@ flipped %>%
 
 Perfect.
 
-We're not going to get into all the helper functions, but they are very useful and you can find more about them at <https://www.rdocumentation.org/packages/dplyr/versions/0.7.2/topics/select_helpers>
+We're not going to get into all the select helper functions, but they are very useful,
+You can read more about them at <https://www.rdocumentation.org/packages/dplyr/versions/0.7.2/topics/select_helpers>
+
+Such scoped versions also exist for other dplyr functions.
+Let's take a quick look at `mutate_at()`.
 
 ``` r
-# summarise_at ???
+# mutate_at(vars(x, y, z), .funs, ...)
 ```
+
+Perhaps we want to format the percentages as text because a web app using the data is having trouble displaying numerics (this generally can be handled by app code but let's say it can't for whatever reason).
+
+``` r
+joined %>% 
+  select(dem_vote_pct, 
+         gop_vote_pct,
+         pct_college,
+         trump_vote_pct,
+         clinton_vote_pct) %>% 
+  mutate_at(vars(dem_vote_pct, 
+                 gop_vote_pct,
+                 pct_college,
+                 trump_vote_pct,
+                 clinton_vote_pct), 
+            as.character)
+```
+
+    ## # A tibble: 104 x 5
+    ##    dem_vote_pct gop_vote_pct pct_college trump_vote_pct clinton_vote_pct
+    ##    <chr>        <chr>        <chr>       <chr>          <chr>           
+    ##  1 53.8         46.2         23.64       47             46              
+    ##  2 54.7         45.3         33.024      43.9           48.7            
+    ##  3 44.8         55.2         42.851      51.6           41.7            
+    ##  4 44.5         55.5         28.346      57.1           36.4            
+    ##  5 61.1         38.9         36.734      37.6           53.5            
+    ##  6 45.8         52.1         28.403      52.4           41.7            
+    ##  7 45.9         54.1         32.2        53             38.5            
+    ##  8 52.3         47.7         17.182      44.9           47.9            
+    ##  9 50.4         49.6         8.127       39.3           54.7            
+    ## 10 54.4         45.6         27.332      43.4           50.1            
+    ## # ... with 94 more rows
+
+You can also create new columns just as you do with mutate
+
+``` r
+joined %>% 
+  select(dem_vote_pct, 
+         gop_vote_pct) %>% 
+  mutate_at(vars(dem_vote_char = dem_vote_pct, 
+                 gop_vote_char = gop_vote_pct), 
+            as.character)
+```
+
+    ## # A tibble: 104 x 4
+    ##    dem_vote_pct gop_vote_pct dem_vote_char gop_vote_char
+    ##           <dbl>        <dbl> <chr>         <chr>        
+    ##  1         53.8         46.2 53.8          46.2         
+    ##  2         54.7         45.3 54.7          45.3         
+    ##  3         44.8         55.2 44.8          55.2         
+    ##  4         44.5         55.5 44.5          55.5         
+    ##  5         61.1         38.9 61.1          38.9         
+    ##  6         45.8         52.1 45.8          52.1         
+    ##  7         45.9         54.1 45.9          54.1         
+    ##  8         52.3         47.7 52.3          47.7         
+    ##  9         50.4         49.6 50.4          49.6         
+    ## 10         54.4         45.6 54.4          45.6         
+    ## # ... with 94 more rows
+
+To mutate certain columns based on criteria, we use `mutate_if()`
+
+``` r
+joined %>% 
+  mutate_if(is.character, str_to_lower)
+```
+
+    ## # A tibble: 104 x 15
+    ##    house_dist keyrace_rating flips dem_vote_pct gop_vote_pct winner margin
+    ##    <chr>      <chr>          <chr>        <dbl>        <dbl> <chr>   <dbl>
+    ##  1 az-01      lean democrat~ n             53.8         46.2 d         7.6
+    ##  2 az-02      likely democr~ y             54.7         45.3 d         9.4
+    ##  3 az-06      likely republ~ n             44.8         55.2 r        10.4
+    ##  4 az-08      likely republ~ n             44.5         55.5 r        11  
+    ##  5 az-09      likely democr~ n             61.1         38.9 d        22.2
+    ##  6 ar-02      lean republic~ n             45.8         52.1 r         6.3
+    ##  7 ca-04      likely republ~ n             45.9         54.1 r         8.2
+    ##  8 ca-10      tossup         y             52.3         47.7 d         4.6
+    ##  9 ca-21      likely republ~ y             50.4         49.6 d         0.8
+    ## 10 ca-25      tossup         y             54.4         45.6 d         8.8
+    ## # ... with 94 more rows, and 8 more variables: former_party <chr>,
+    ## #   pct_college <dbl>, pct_college_abovebelow_natl <chr>,
+    ## #   median_income <dbl>, median_income_abovebelow_natl <chr>,
+    ## #   prez_winner_2016 <chr>, trump_vote_pct <dbl>, clinton_vote_pct <dbl>
+
+``` r
+joined %>% 
+  mutate_if(is.character, str_to_title)
+```
+
+    ## # A tibble: 104 x 15
+    ##    house_dist keyrace_rating flips dem_vote_pct gop_vote_pct winner margin
+    ##    <chr>      <chr>          <chr>        <dbl>        <dbl> <chr>   <dbl>
+    ##  1 Az-01      Lean Democrat~ N             53.8         46.2 D         7.6
+    ##  2 Az-02      Likely Democr~ Y             54.7         45.3 D         9.4
+    ##  3 Az-06      Likely Republ~ N             44.8         55.2 R        10.4
+    ##  4 Az-08      Likely Republ~ N             44.5         55.5 R        11  
+    ##  5 Az-09      Likely Democr~ N             61.1         38.9 D        22.2
+    ##  6 Ar-02      Lean Republic~ N             45.8         52.1 R         6.3
+    ##  7 Ca-04      Likely Republ~ N             45.9         54.1 R         8.2
+    ##  8 Ca-10      Tossup         Y             52.3         47.7 D         4.6
+    ##  9 Ca-21      Likely Republ~ Y             50.4         49.6 D         0.8
+    ## 10 Ca-25      Tossup         Y             54.4         45.6 D         8.8
+    ## # ... with 94 more rows, and 8 more variables: former_party <chr>,
+    ## #   pct_college <dbl>, pct_college_abovebelow_natl <chr>,
+    ## #   median_income <dbl>, median_income_abovebelow_natl <chr>,
+    ## #   prez_winner_2016 <chr>, trump_vote_pct <dbl>, clinton_vote_pct <dbl>
