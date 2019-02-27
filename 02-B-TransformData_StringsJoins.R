@@ -187,8 +187,65 @@ events %>%
     )
   ) 
 
-#' notice that in the example above, the search for comma comes first, not last
-#'         
+#' Notice that in the example above, the search for comma comes first, not last
+#'    
+
+#' We can also use our string functions for filtering  
+#' Let's see what that might look like
+
+events %>% 
+  filter(str_detect(event_type, "event"))
+
+#'  
+#' That's *kinda* helpful, but is there a column this could be even more useful for?  
+#'   
+#' Examine the descriptions
+
+events %>% 
+  select(cand_restname, description) 
+
+#' What we we want to find descriptions mentioning students
+
+events %>% 
+  select(cand_restname, description) %>% 
+  filter(str_detect(description, "student"))
+
+#' How about anything referencing the NAACP
+
+events %>% 
+  select(cand_restname, description) %>% 
+  filter(str_detect(description, "NAACP"))
+
+#' Remember: R is *case-sensitive*.   
+#' Could an acronym like that possibly cause us trouble?  
+#'   
+#' If so, how might we solve the issue of case sensitivity?
+#'   
+
+events %>% 
+  select(cand_restname, description) %>% 
+  filter(str_detect(str_to_lower(description), "naacp"))
+
+#' This method is a good strategy to use almost anytime you're searching in this way  
+#'   
+#' Even when you don't think you'll need it, you never know.  
+#'   
+#' Let's look at an example
+
+events %>% 
+  filter(str_detect(description, "border"))
+
+#' No results. Or are there?
+
+events %>% 
+  filter(str_detect(str_to_lower(description), "border"))
+
+#' You can also do the reverse for the case, with the same goal. 
+
+events %>% 
+  filter(str_detect(str_to_upper(description), "BORDER"))
+
+
 
 #'### Joining Tables 
 

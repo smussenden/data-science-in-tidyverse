@@ -316,21 +316,20 @@ str_replace_all(x, "[aeiou]", "-")
 events
 ```
 
-    ## # A tibble: 88 x 10
-    ##    date       cand_restname cand_lastname cand_fullname city  addtl_cities
-    ##    <date>     <chr>         <chr>         <chr>         <chr> <chr>       
-    ##  1 2010-02-06 John          Delaney       John Delaney  Salt~ <NA>        
-    ##  2 2019-01-31 Sherrod       Brown         Sherrod Brown Perry Cresco, Mas~
-    ##  3 2019-01-31 Marianne      Williamson    Marianne Wil~ Des ~ <NA>        
-    ##  4 2019-01-31 Eric          Swalwell      Eric Swalwell Exet~ <NA>        
-    ##  5 2019-01-31 John          Hickenlooper  John Hickenl~ Wash~ <NA>        
-    ##  6 2019-01-30 John          Delaney       John Delaney  Coun~ Sioux City,~
-    ##  7 2019-01-30 Sherrod       Brown         Sherrod Brown Clev~ <NA>        
-    ##  8 2019-01-30 Howard        Schultz       Howard Schul~ Tempe <NA>        
-    ##  9 2019-01-29 Beto          O'Rourke      Beto O'Rourke El P~ <NA>        
-    ## 10 2019-01-29 Michael       Bloomberg     Michael Bloo~ Manc~ Concord, Na~
-    ## # ... with 78 more rows, and 4 more variables: state <chr>,
-    ## #   event_type <chr>, sponsor <chr>, description <chr>
+    ## # A tibble: 88 x 7
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-31 Sherrod       Brown         Perry IA    meet and ~
+    ##  3 2019-01-31 Marianne      Williamson    Des ~ IA    campaign ~
+    ##  4 2019-01-31 Eric          Swalwell      Exet~ NH    meet and ~
+    ##  5 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  6 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  7 2019-01-30 Sherrod       Brown         Clev~ OH    rally     
+    ##  8 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  9 2019-01-29 Beto          O'Rourke      El P~ TX    meet and ~
+    ## 10 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ## # ... with 78 more rows, and 1 more variable: description <chr>
 
 now let’s use string functions to standardize a few event types
 
@@ -388,7 +387,151 @@ events %>%
     ## 10 event speech, meet and greet multiple         
     ## # ... with 78 more rows
 
-notice that in the example above, the search for comma comes first, not
+Notice that in the example above, the search for comma comes first, not
 last
+
+We can also use our string functions for filtering  
+Let’s see what that might look like
+
+``` r
+events %>% 
+  filter(str_detect(event_type, "event"))
+```
+
+    ## # A tibble: 50 x 7
+    ##    date       cand_restname cand_lastname city  state event_type
+    ##    <date>     <chr>         <chr>         <chr> <chr> <chr>     
+    ##  1 2010-02-06 John          Delaney       Salt~ UT    event spe~
+    ##  2 2019-01-31 John          Hickenlooper  Wash~ DC    event spe~
+    ##  3 2019-01-30 John          Delaney       Coun~ IA    campaign ~
+    ##  4 2019-01-30 Howard        Schultz       Tempe AZ    event spe~
+    ##  5 2019-01-29 Michael       Bloomberg     Manc~ NH    event spe~
+    ##  6 2019-01-25 Kamala        Harris        Colu~ SC    event spe~
+    ##  7 2019-01-25 Michael       Bloomberg     Wash~ DC    event spe~
+    ##  8 2019-01-25 John          Delaney       Des ~ IA    event spe~
+    ##  9 2019-01-24 Joe           Biden         Wash~ DC    event spe~
+    ## 10 2019-01-24 Eric          Garcetti      Wash~ DC    event spe~
+    ## # ... with 40 more rows, and 1 more variable: description <chr>
+
+That’s *kinda* helpful, but is there a column this could be even more
+useful for?
+
+Examine the descriptions
+
+``` r
+events %>% 
+  select(cand_restname, description) 
+```
+
+    ## # A tibble: 88 x 2
+    ##    cand_restname description                                               
+    ##    <chr>         <chr>                                                     
+    ##  1 John          Delaney will speak at the Sorenson Winter Innovation Summ~
+    ##  2 Sherrod       Roundtable with local farmers in Perry, IA and meet and g~
+    ##  3 Marianne      Campaign announcement                                     
+    ##  4 Eric          Meet and greet with Rockingham County Democrats           
+    ##  5 John          Brookings institution Hamilton Project                    
+    ##  6 John          Meet & greets and campaign office openings                
+    ##  7 Sherrod       Dignity of Work tour                                      
+    ##  8 Howard        Discussion with ASU students                              
+    ##  9 Beto          meet and greet with UTEP students                         
+    ## 10 Michael       Saint Anselm Institute of Politics, factory tour and hous~
+    ## # ... with 78 more rows
+
+What we we want to find descriptions mentioning students
+
+``` r
+events %>% 
+  select(cand_restname, description) %>% 
+  filter(str_detect(description, "student"))
+```
+
+    ## # A tibble: 6 x 2
+    ##   cand_restname description                                                
+    ##   <chr>         <chr>                                                      
+    ## 1 Howard        Discussion with ASU students                               
+    ## 2 Beto          meet and greet with UTEP students                          
+    ## 3 Jay           League of Conservation Voters, speech to Dartmouth and Sai~
+    ## 4 Bernie        SC NAACP MLK Day program, Conversation with students at Be~
+    ## 5 Cory          InspireNOLA and Rep. Cedric Richmond’s “Project LIVE & Ach~
+    ## 6 Beto          meet and greet with Pueblo Community College students
+
+How about anything referencing the NAACP
+
+``` r
+events %>% 
+  select(cand_restname, description) %>% 
+  filter(str_detect(description, "NAACP"))
+```
+
+    ## # A tibble: 3 x 2
+    ##   cand_restname description                                                
+    ##   <chr>         <chr>                                                      
+    ## 1 Bernie        SC NAACP MLK Day program, Conversation with students at Be~
+    ## 2 Cory          SC NAACP MLK Day program                                   
+    ## 3 Kamala        NAACP Women in Power town hall
+
+Remember: R is *case-sensitive*.  
+Could an acronym like that possibly cause us trouble?
+
+If so, how might we solve the issue of case sensitivity?
+
+``` r
+events %>% 
+  select(cand_restname, description) %>% 
+  filter(str_detect(str_to_lower(description), "naacp"))
+```
+
+    ## # A tibble: 3 x 2
+    ##   cand_restname description                                                
+    ##   <chr>         <chr>                                                      
+    ## 1 Bernie        SC NAACP MLK Day program, Conversation with students at Be~
+    ## 2 Cory          SC NAACP MLK Day program                                   
+    ## 3 Kamala        NAACP Women in Power town hall
+
+This method is a good strategy to use almost anytime you’re searching in
+this way
+
+Even when you don’t think you’ll need it, you never know.
+
+Let’s look at an example
+
+``` r
+events %>% 
+  filter(str_detect(description, "border"))
+```
+
+    ## # A tibble: 0 x 7
+    ## # ... with 7 variables: date <date>, cand_restname <chr>,
+    ## #   cand_lastname <chr>, city <chr>, state <chr>, event_type <chr>,
+    ## #   description <chr>
+
+No results. Or are there?
+
+``` r
+events %>% 
+  filter(str_detect(str_to_lower(description), "border"))
+```
+
+    ## # A tibble: 3 x 7
+    ##   date       cand_restname cand_lastname city  state event_type description
+    ##   <date>     <chr>         <chr>         <chr> <chr> <chr>      <chr>      
+    ## 1 2018-12-23 Beto          O'Rourke      Torn~ TX    tour       Border vis~
+    ## 2 2018-12-15 Jeff          Merkley       Torn~ TX    tour       Border vis~
+    ## 3 2018-12-15 Beto          O'Rourke      Torn~ TX    tour       Border vis~
+
+You can also do the reverse for the case, with the same goal.
+
+``` r
+events %>% 
+  filter(str_detect(str_to_upper(description), "BORDER"))
+```
+
+    ## # A tibble: 3 x 7
+    ##   date       cand_restname cand_lastname city  state event_type description
+    ##   <date>     <chr>         <chr>         <chr> <chr> <chr>      <chr>      
+    ## 1 2018-12-23 Beto          O'Rourke      Torn~ TX    tour       Border vis~
+    ## 2 2018-12-15 Jeff          Merkley       Torn~ TX    tour       Border vis~
+    ## 3 2018-12-15 Beto          O'Rourke      Torn~ TX    tour       Border vis~
 
 ### Joining Tables
