@@ -495,8 +495,8 @@ joined %>%
 #'   
 #' More details at https://dplyr.tidyverse.org/reference/group_by_all.html  
 #'   
-#' Let's take a brief look
+#' We're not going to go into it for this session - mainly because I haven't even explored it myself yet.
 
-         
+
 
 
