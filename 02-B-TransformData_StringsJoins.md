@@ -1188,3 +1188,9 @@ joined %>%
     ## #   pct_college <dbl>, pct_college_abovebelow_natl <chr>,
     ## #   median_income <dbl>, median_income_abovebelow_natl <chr>,
     ## #   prez_winner_2016 <chr>, trump_vote_pct <dbl>, clinton_vote_pct <dbl>
+
+Finally, hot of the presses: just released in the **new version** of dplyr, 0.8. Scoped version of `group_by()`!
+
+More details at <https://dplyr.tidyverse.org/reference/group_by_all.html>
+
+Let's take a look

@@ -491,10 +491,12 @@ joined %>%
 joined %>% 
   mutate_if(is.character, str_to_title)
 
+#' Finally, hot of the presses: just released in the **new version** of dplyr, 0.8. Scoped version of `group_by()`!
+#'   
+#' More details at https://dplyr.tidyverse.org/reference/group_by_all.html  
+#'   
+#' Let's take a brief look
 
-
-
-
-
+         
 
 
