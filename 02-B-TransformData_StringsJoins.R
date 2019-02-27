@@ -261,5 +261,41 @@ key_house_historical <- readRDS("key_house_historical.rds")
 #' What do we have here? Let's take a look and discuss.
 #'   
 #'   
+key_house_results
 
+key_house_historical
 
+#` This is a common thing to see - ables designed to be joined together based on a common key.
+#'  
+#' In this case, we have the house district itself as the common key between the two tables.
+#'   
+#' We'll use dplyr's `inner_join()` function to match the tables based on that column.  
+#' Let's see how that works
+
+inner_join(key_house_results, key_house_historical)
+
+#' Wait, that's it? We haven't even told it what to join on.  
+#' That's because if the two tables share columns with the same name, it defaults to use them for the join.  
+#'   
+#' If you need to specific which columns in each table to match together, you do it like this:
+
+# inner_join(table1, table2, by = c("table1_columnname" = "table2_columnname"))
+
+#' We can also use the pipe to write out a join. It depends on your preference.
+
+key_house_results %>% 
+  inner_join(key_house_historical)
+
+#' Now with an explicit mentioning of the column to join
+
+key_house_results %>% 
+  inner_join(key_house_historical, by = "house_dist")
+
+#' Remember, if we want to save the results, we need to create a new object
+
+joined <- key_house_results %>% 
+  inner_join(key_house_historical, by = "house_dist")
+
+#' Let's explore our new joined table using what we've learned so far
+
+glimpse(joined)
