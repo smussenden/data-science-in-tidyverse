@@ -1,7 +1,7 @@
 #'---
-#'title: "Transforming Data, Part A"
+#'title: "Transforming Data, Part A - NICAR 2019"
 #'author:
-#'date: "NICAR 2019"
+#'date: 
 #'output: github_document
 #'---
 
