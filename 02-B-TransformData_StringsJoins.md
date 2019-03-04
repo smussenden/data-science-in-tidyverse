@@ -1,6 +1,5 @@
-Transforming Data, Part B
+Transforming Data, Part B - NICAR 2019
 ================
-NICAR 2019
 
 load the packages we'll need
 
@@ -8,14 +7,14 @@ load the packages we'll need
 library(tidyverse) # we'll use the stringr package from tidyverse
 ```
 
-    ## -- Attaching packages ------------------------------------------------------------------------------------------------------ tidyverse 1.2.1 --
+    ## -- Attaching packages ------------------------------------------------------------------------------------------------------- tidyverse 1.2.1 --
 
     ## v ggplot2 3.1.0       v purrr   0.3.0  
     ## v tibble  2.0.1       v dplyr   0.8.0.1
     ## v tidyr   0.8.2       v stringr 1.4.0  
     ## v readr   1.3.1       v forcats 0.4.0
 
-    ## -- Conflicts --------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
+    ## -- Conflicts ---------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 

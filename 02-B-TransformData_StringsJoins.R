@@ -1,7 +1,7 @@
 #'---
-#'title: "Transforming Data, Part B"
+#'title: "Transforming Data, Part B - NICAR 2019"
 #'author: 
-#'date: "NICAR 2019"
+#'date: 
 #'output: github_document
 #'---
 
@@ -490,6 +490,8 @@ joined %>%
 
 joined %>% 
   mutate_if(is.character, str_to_title)
+
+
 
 #' Finally, hot of the presses: just released in the **new version** of dplyr, 0.8. Scoped version of `group_by()`!
 #'   
