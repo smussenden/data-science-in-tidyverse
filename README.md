@@ -7,12 +7,9 @@ output:
 
 This is the repo for the one-day workshop *"Exploring the tidyverse"* taught at [NICAR](https://www.ire.org/conferences/nicar-2019/)'s 2019 confernce in Orange County, California.
 
-It is based on the book [R for Data Science](http://r4ds.had.co.nz/) and Hadley Wickham's original workshop material for NICAR 2018 from which this repository was forked -- but this is a slimmed-down version designed to fit into the one-day journalism workshop and also contains significant changes and additions to the original modules, including adding new training data and materials taken from Andrew Ba Tran's [R for Journalists](https://learn.r-journalism.com/en/) and my own custom materials and training sequences.
+It is a heavily modified version of a session originally taught by Hadley Wickham and based on the book [R for Data Science](http://r4ds.had.co.nz/). It contains significant changes and additions to the original modules tailored to a data journalism audience and one-day time frame, including new training data and materials on visualization from Andrew Ba Tran and his [R for Journalists](https://learn.r-journalism.com/en/), my own materials and training sequences on transforming data, and Olga Pierce's materials on modeling and statistics.
 
 This workshop is designed for people who are familiar with R and want to learn how to achieve their data analysis goals the "tidy" way. You will learn how to visualize, transform, and model data in R and work with date-times, character strings, and untidy data formats. Along the way, you will learn and use many packages from the tidyverse including ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, lubridate, and forcats.
-
-NOTE: This modified repository is currently a ***work in progress**, prior to NICAR 2019.
-
 
 ## Software requirements
 
@@ -25,7 +22,7 @@ install.packages(c("tidyverse", "lubridate", "janitor", fivethirtyeight", "rmark
 Then you can grab a local copy of all the slides, code, data, and cheatsheets with:
 
 ```R
-usethis::use_course("BITLYLINK")
+usethis::use_course("https://bit.ly/2XJD5fB")
 ```
 
 To get back to this project later, double-click on "data-science-in-the-tidyverse.Rproj".
