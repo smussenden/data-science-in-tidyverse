@@ -1,3 +1,4 @@
+library(tidyverse)
 library(readr)
 
 ages <- read_csv("data/ages.csv")
@@ -12,9 +13,9 @@ head(ages)
 library(ggplot2)
 
 ggplot(data=ages) +
-  geom_point(mapping=aes(x=actor_age, y=actress_age)) + 
-  expand_limits(x = 0, y = 0) +
-  geom_abline(intercept=0, col="light gray") 
+  geom_point(mapping=aes(x=actress_age, y=actor_age)) + 
+  expand_limits(x = 10, y = 0) +
+  geom_abline(intercept=15, col="light gray") 
 
 head(ages)
 
@@ -43,7 +44,7 @@ ggplot(data=ages,
 
 ggplot(data=ages,
        aes(x=actor, fill=Genre)) +
-       geom_bar(position="dodge")
+       geom_bar(position="fill")
 
 ## Spinogram
 
@@ -64,8 +65,7 @@ ggplot(ages, aes(x=actor, y=actress_age)) +
 ## Scaling
 
 ggplot(data=ages, aes(x=actor_age)) +
-       geom_histogram(binwidth=1)
-
+       geom_histogram(binwidth=3)
 
 ggplot(data=ages, aes(x=actor_age)) +
        geom_histogram() + scale_x_log10()
@@ -171,7 +171,7 @@ ggplot(data=ages) +
       geom_point(mapping=aes(x=actor_age, y=actress_age)) + 
       expand_limits(x = 0, y = 0) +
       geom_abline(intercept=0, col="light gray") +
-      facet_wrap(~actor, ncol=4)
+      facet_wrap(~actor, ncol=3)
 
 ## Global versus Local
 
@@ -189,10 +189,10 @@ ages_copy <- ages %>% select(-actor)
                        
 ggplot(data=ages,
        aes(x=actor_age, y=actress_age, color=actor)) +
-       geom_point(data=ages_copy, color="grey") +
-       geom_point() +
-       facet_wrap(~actor) +
-      theme(legend.position="none") # This removes the legend
+      geom_point(data=ages_copy, color="grey") +
+  geom_point() +   
+      facet_wrap(~actor) +
+      theme(legend.position="top") # This removes the legend
 
 # Challenge yourself with these exercises
 # http://code.r-journalism.com/chapter-4/#section-ggplot2

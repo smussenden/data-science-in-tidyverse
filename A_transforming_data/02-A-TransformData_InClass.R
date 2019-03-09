@@ -28,15 +28,15 @@ pollution
 
 #'Since there are only a handful of rows, a bit harder to see - let's try the built-in "iris" data
 
-
+iris
 
 #'That was a lot of output! Can limit rows with head()
 
-
+head(iris)
 
 #'But let's see how tibbles differ in their output
 
-
+as_tibble(iris)
 
 
 #'### FILTERING AND SORTING 
@@ -46,22 +46,34 @@ pollution
 
 #'Let's go back to our little pollution dataset
 
+pollution
 
 
 #'Show me only the ones with a "large" size
 
-
+large_cities <- pollution %>%
+  filter(size == "large")
 
 #'Show me only the ones where the city is London
 
+London <- pollution %>%
+  filter(city == "London")
 
 #'For numeric values, you can use boolean operators 
 
+lot_of_pollution <- pollution %>%
+  filter(amount > 20)
 
 #'Now, let's try filtering based on two different variables
 
-
-
+## OR
+large_pollution <- pollution %>%
+  filter(amount > 20 |
+         size == "large")
+## AND
+large_pollution <- pollution %>%
+  filter(amount > 20,
+           size == "large")
 
 #'This can still get a little confusing once you wind up with larger amounts of steps to string together.  
 #'  
@@ -71,7 +83,7 @@ pollution
 #'  
 #'Watch this, and see how much easier it becomes for a human to think through (and read later!)
 
-
+%>% 
 
 #'Voila! So what just happened there?  
 #'  
@@ -81,7 +93,9 @@ pollution
 
 #'This becomes easy to see when we add new functions - so let's talk about sorting with arrange()
 
-
+arranging <- pollution %>%
+  arrange(desc(amount)) %>%
+  filter(amount > 20)
 
 #'To sort by highest value, add desc()
 
@@ -89,15 +103,22 @@ pollution
 
 #'Now let's go back to our filtering and add arranging, too
 
-)
+arranging <- pollution %>%
+  arrange(desc(amount)) %>%
+  filter(amount > 20)
+
 
 #'Add another filter criteria
-
+arranging <- pollution %>%
+  arrange(desc(amount)) %>%
+  filter(amount > 20, city == "London")
 
 
 #'This can be formatted this way as well, if it's even easier for you to read  
 #'Let's add another filter criteria
-
+arranging <- pollution %>%
+  arrange(desc(amount)) %>%
+  filter(amount > 20, city == "London")
 
 
 #'Think about what we just did here.  
@@ -113,12 +134,20 @@ pollution
 #' Dplyr makes this easy using **select()`**
 #'   
 
+arranging <- pollution %>%
+  arrange(desc(amount)) %>%
+  filter(amount > 20, city == "London") %>%
+  select(city, amount)
 
 #' You can pull out just certain variables as well  
 #' This results in the same thing as above
 
+arranging <- pollution %>%
+  arrange(desc(amount)) %>%
+  filter(amount > 20, city == "London") %>%
+  select(amount, everything())
 
-
+Use MINUS sign to reverse select
 
 #'### PRESIDENTIAL CANDIDATE TRIPS  
 #'  
@@ -135,11 +164,10 @@ events
 #' Even easier to see a dataset with `View()`  
 #' Click on its name under the environment tab in upper right, or:
 
+View(events)
 
 
 #' Can also pipe the results of a chain if we wanted to
-
-
 
 
 #' Can you think of when we might find ourselves wanting to do that? (hint: think big)  
@@ -148,25 +176,32 @@ events
 #'   
 #' Show all events in Iowa:
 
-
+iowa_events <- events %>%
+  filter(state == "IA")
+View(iowa_events)
 
 #' Has Kamala Harris been to Iowa?
-
+iowa_events_harris <- events %>%
+  filter(state == "IA",
+         cand_lastname == "Harris"
+         )
+View(iowa_events)
 
 
 #' What about another candidate
 
 
-
 #' Let's talk about **date-specific** stuff.    
 #' If I have a properly formatted date in a dataframe, can I sort by it? *Yes.*
-
+date_sort <- events %>%
+  arrange(desc(date))
 
 
 #' What if I want to pull out only certain ranges of dates? *Several approaches.*   
 
-#' Specifiying a specific date using as.Date()
-
+#' Specifiying a specific date
+events %>%
+  filter(date == "2019-01-31")
 
 
 #' Take advantage of the LUBRIDATE package - a tidyverse package specifically for dates  
@@ -174,16 +209,23 @@ events
 #'   
   
 #' Now watch what we can do:
-
-
+year_2018 <- events %>%
+  filter(year(date) == "2018")
 
 #' Just events in January 2019
 
-
+jan_2019 <- events %>%
+  filter(year(date) == 2019,
+         month(date) == 1)
 
 #' Events earlier than Dec 2018
 
+before_dec_2018 <- events %>%
+  filter(year(date) < 2018,
+         month(date) < 12)
 
+jan_2019 <- events %>%
+  filter(date < "2018-12-31")
 
 #' Also allows us to do things like, "I only want to see events the *first week of every month*" 
 
@@ -213,15 +255,23 @@ events %>%
 
 #' Now let's try adding our date-related columns.  First we'll try year.
 
-
+events %>% 
+  mutate(year = year(date))
 
 #' We can add multiple columns as part of one mutate call. Let's do year, month and day in one swoop.
 
+events %>% 
+  mutate(year = year(date),
+         month = month(date),
+         day = day(date))
 
 
 #' This is a good time to remind ourselves that if we want to save our new columns, need to *create new object* or *overwrite*
 
-
+events <- events %>% 
+  mutate(year = year(date),
+         month = month(date),
+         day = day(date))
 
 #' Now we can use our new columns to filter
 
@@ -250,10 +300,10 @@ events %>%
 
 #' now let's add arrange to see who has the most trips
 
-# events %>% 
-#   group_by(cand_lastname) %>% 
-#   summarise(n()) %>% 
-#   arrange(n)
+trip_count <- events %>% 
+ group_by(cand_lastname) %>% 
+ summarise(count = n()) %>% 
+ arrange(desc(count))
 
 #' hmm - what's going on here? Look closely and see what the generated count column is called
 
@@ -291,6 +341,11 @@ events %>%
 #' We can call the new columnn anything we want. "n" is a common thing for counts,  
 #' but can be anything
 
+trip_count <- events %>% 
+  group_by(cand_lastname) %>% 
+  summarise(count = n()) %>% 
+  arrange(desc(count))
+
 
 
 #' Now for the magic  
@@ -298,10 +353,16 @@ events %>%
 #' ...there is a special shortcut - `count()` - that we can use that collapses everything into one function
 
 
+trip_count <- events %>% 
+  group_by(cand_lastname) %>% 
+  count(cand_lastname)
 
 
 
 #' top states visited
+trip_count <- events %>% 
+  count(cand_lastname, state) %>%
+  arrange(state, desc(n))
 
 
 
@@ -359,7 +420,7 @@ events %>%
 #'   
 #' We'll show a quick example of what that looks like, and then start from the beginning in the next module.  
 
-events %>%
+events <- events %>%
   mutate(new_type = case_when(
     str_detect(event_type, "event") ~ "event")
   )

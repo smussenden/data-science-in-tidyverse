@@ -70,7 +70,7 @@ Let's load some data, create a chart, and break down the layers.
 
 We'll some data from [Vulture.com](http://www.vulture.com/2013/04/leading-men-age-but-their-love-interests-dont.html) comparing ages of leading men in movies compared to their love interests.
 
-```{r importing_data, warning=F, message=F}
+```{r importing_data, warning=T, message=T}
 library(readr)
 
 ages <- read_csv("data/ages.csv")

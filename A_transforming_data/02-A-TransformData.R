@@ -17,6 +17,7 @@ pollution <- tibble(city=c("New York", "New York", "London", "London", "Beijing"
                size=c("large", "small", "large", "small", "large", "small"),
                amount=c(23, 14, 22, 16, 121, 56))
 
+
 #'*What are "tibbles"...?*    
 #'  
 #'They're dataframes, with some additional tidyverse-infused features. Returns more readable output in the console.
@@ -398,9 +399,9 @@ events %>%
 #'   
 #' let's see `ifelse()` in action
 
-events %>% 
+events <- events %>% 
   mutate(new_type = ifelse(event_type == "event speech", "TEST", event_type)) 
-
+View(events)
 #' ok now let's clean a few columns for real
 
 events %>% 
@@ -418,6 +419,17 @@ events %>%
             event_type == "event speech" ~ "speech",
             event_type == TRUE ~ "other"
       ))
+
+OR OVERWRITE
+
+events %>%
+  mutate(event_type = case_when(
+    event_type == "campaign event" ~ "event",
+    event_type == "campaign events" ~ "event",
+    event_type == "event speech" ~ "speech",
+    event_type == TRUE ~ "other"
+  ))
+
 
 #' Of course, you may be asking: wouldn't it be nice if we could standardize...  
 #' ...based on certain keywords or patterns?  Instead of spelling out every variation.  

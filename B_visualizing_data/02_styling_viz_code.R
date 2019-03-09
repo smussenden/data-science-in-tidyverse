@@ -5,6 +5,8 @@ library(readr)
 
 ages <- read_csv("data/ages.csv")
 
+head(ages)
+
 library(ggplot2)
 
 ggplot(ages,
@@ -20,7 +22,7 @@ ggplot(ages,
 library(forcats)
 
 ggplot(ages,
-       aes(x=actress_age, y=fct_reorder(Movie, actress_age, desc=TRUE))) +
+       aes(x=actress_age, y=fct_reorder(Movie, actress_age, desc=FALSE))) +
   geom_point()
 
 
