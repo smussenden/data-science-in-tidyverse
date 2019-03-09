@@ -1,0 +1,314 @@
+---
+title: "Stats in R"
+author: Olga Pierce, University of Nebraska-Lincoln
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+This will help us focus on the goal of the code (understanding stats better), instead of the code itself, which is a means to an end.
+
+You can take this notebook with you, which will provide templates to execute various analyses.
+
+
+### Install some extra packages (if needed)
+
+```{r}
+install.packages("modelr")
+install.packages("epiR")
+install.packages ("janitor")
+```
+
+### Call packages
+
+```{r}
+library(tidyverse)
+library(modelr)
+library(broom)
+library(epiR)
+library(janitor)
+```
+
+### Load data
+
+We'll be using a table of simplified school-level data regarding the racial makeup of schools and their scores on the PARCC standardized test.
+
+(It's outside our purview today, but of course normally we would use best practice and study the data dictionary/documentation before we do anything else).
+
+```{r}
+schools_data <- read_csv("ILschools.csv")
+```
+
+The readr package decisions seem reasonable. Let's have a look at the top of our table. Scroll through to the right, paying special attention to our percentage columns. 
+
+```{r}
+head(schools_data)
+```
+
+### Fix column headers
+
+The janitor package fixes a lot of common data hygeine problems. In this case, we'll change these hideous and inconsistent column names to conform with R conventions
+
+```{r}
+schools_data <- schools_data %>% clean_names()
+head(schools_data)
+```
+
+
+### Learn a bit about our columns from the get-go
+
+```{r}
+summary(schools_data)
+```
+
+We can see that the various columns have very different means. We can also see that the means and medians can be very different. This indicates to us that the distributions are different, and not normal.
+
+## Exploring distributions with ggplot
+
+It's a very powerful graphics library in R. We won't dwell too much on ggplot syntax here, but I encourage you to keep working on it.
+
+First, let's look at what's known as a normal distribution.
+
+```{r}
+set.seed(1)
+df <- data.frame(PF = 10*rnorm(10000))
+ggplot(df, aes(x = PF)) + 
+    geom_histogram(aes(y =..density..),
+                   breaks = seq(-50, 50, by = 5), 
+                   colour = "black", 
+                   fill = "deepskyblue") +
+stat_function(fun = dnorm, args = list(mean = mean(df$PF), sd = sd(df$PF)))
+```
+
+
+
+
+```{r}
+print(paste0("mean: ", round(mean(df$PF),0)))
+print(paste0("median: ", round(median(df$PF),0)))
+```
+
+In this distribution, the mean (aka 'average') and the median are equal, and both sides are symmetrical around them. But this is unusual in the real world, so looking at distributions can tell us a lot about 
+
+Let's start with the distribution of test scores, which we'll make with ggplot. 
+
+```{r}
+# First tell ggplot which data and variable to use
+c <- ggplot(schools_data, aes(parc_cpct))
+
+# Then we tell ggplot which viz to make
+
+c + geom_histogram(binwidth = 10)
+```
+
+What does this tell us about the distribution of school test-passing rates? This is called skew.
+
+Next let's look at the distribution of the percent black variable
+
+```{r}
+# First tell ggplot which data and variable to use
+
+c <- ggplot(schools_data, aes(pct_black))
+
+# Then we tell ggplot which viz to make
+
+c + geom_histogram(binwidth = 10)
+```
+
+What does this shape tell us about schools in Illinois?
+
+What are some other areas of life where we might find this distribution?
+
+You try: make a histogram of the distribution of pct_low_inc
+
+```{r}
+
+```
+
+## Looking at relationships between two variables
+
+Let's explore the relationship between the percent of a school's students who are low-income, and the percent who are proficient.
+
+First, let's practice filtering for just elementary schools.
+
+```{r}
+elementary_schools <- 
+```
+
+Now let's plot the relationship between the percent of a school's students who are low-income and the percent who achieved proficiency on the PARCC exam.
+
+```{r}
+# Define the x and y variables
+a <- ggplot(elementary_schools, aes(pct_low_inc, parc_cpct))
+
+# Plot points
+a + geom_point(color = "turquoise", alpha = .6)
+```
+
+We can see that in general a higher rate of low-income students at a school is associated with a lower rate of passing the exam.
+
+Let's formalize this by fitting a line.
+
+```{r}
+a + geom_point(color = "turquoise", alpha = .6) + geom_smooth(method = lm)
+```
+
+```{r}
+low_inc_mod <- lm(parc_cpct ~ pct_low_inc, data = elementary_schools)
+summary(low_inc_mod)
+```
+
+Remember y = mx + b ? What does the output above tell us?
+
+You try: Run a linear regression that shows the relationship between the percent white and the percent who passed the exam. What do we learn from this? How do we put it into words?
+
+### Multiple regression
+
+Does a school being in Chicago affect these results? First, let's consider this visually. 
+
+```{r}
+a <- ggplot(elementary_schools, aes(pct_low_inc, parc_cpct, color = chi))
+a + geom_point(alpha = .5)
+```
+
+```{r}
+a + geom_point(alpha = .5) + geom_smooth(method = "lm")
+```
+
+Let's run a new regression that includes the 'chi' variable. And then summarize output.
+
+```{r}
+multi_mod <- lm(parc_cpct ~ pct_low_inc + chi, data = elementary_schools)
+summary(multi_mod)
+```
+
+Looking better, but the output is still pretty ugly. We can make it more useful using the broom packaage.
+
+```{r}
+tidy(multi_mod)
+```
+
+Now it's a data frame, instead of that weird model object.
+
+You practice. Run a linear model where our predictors are pct_white and chi. Then clean up your output using broom.
+
+```{r}
+
+```
+
+If we feed our original data frame and our model through the augment() function, it will calculate fitted values for us.
+
+A fitted, or predicted, value is the percent PARCC proficiency our model suggests would be expected for this school given the terms in our model (in this case the percent of a school's students who are low-income and whether the school is in Chicago).
+
+```{r}
+mod_grid <- lm(parc_cpct ~ pct_low_inc + chi, data = schools_data, na.action = "na.exclude") %>% augment(multi_mod, elementary_schools) 
+View(head(mod_grid,20))
+```
+
+The difference between the fitted value and the actual value can be interpreted as whether a school is over- or under-performing. We can plot this.
+
+To keep our plot from being too busy, let's filter out values that are not outliers.
+
+```{r}
+mod_grid <- mod_grid %>% mutate(residual = .fitted - parc_cpct) %>% filter(residual < -20 | residual > 20)
+```
+
+
+
+```{r}
+ggplot(mod_grid, aes(x = pct_low_inc, y = parc_cpct)) +
+  geom_segment(aes(xend = pct_low_inc, yend = .fitted), alpha = .2) +
+  geom_point(aes(color = residual),alpha = .8) +
+  scale_color_gradient2(low = "blue", mid = "white", high = "red") +
+  guides(color = FALSE) +
+  geom_point(aes(y = .fitted)) +
+  facet_grid(~ chi)
+```
+
+# Looks like we've got some schools with unexpected test scores!
+
+Let's find them.
+
+```{r}
+View(mod_grid %>% arrange(residual))
+```
+
+Story language:
+
+Eisenhower Elementary outscored what would be expected for a similar school with mostly low-income students by 73 percentage points.
+
+### Logistic regression
+
+Add a column for 'good school' where more than half of the students have passed the test.
+
+```{r}
+
+```
+
+Now let's use more than one variable to predict whether a school is "good".
+
+```{r}
+
+```
+
+We can use our summary function again to see the output of our regression.
+
+```{r}
+```
+
+Let's unpack what our results mean.
+
+You try: Let's create a variable indicating whether a school is in Cook County or not, called 'cook'.
+
+```{r}
+
+```
+
+Now let's run a logistic regression with cook and pct_black as our predictors and good_school as our dependent variable, then summarize.
+
+```{r}
+
+```
+
+What do we learn?
+
+You try: Run a logistic regression with chi and pct_white as our predictors, and good_school as our dependent variable. Then summarize.
+
+```{r}
+
+```
+
+What do we learn?
+
+What are some other questions we could answer with a logistic regression?
+
+```{r}
+
+```
+
+Non-linear relationships
+
+Of course, not all relationships are strictly linear. How do we get a sense of the curve's shape? Turns out ggplot will help us find this with a different type of geom_smooth. 
+
+```{r}
+# Define the x and y variables
+a <- ggplot(elementary_schools, aes(pct_low_inc, parc_cpct))
+
+# Plot points
+a + geom_point(color = "turquoise", alpha = .6) +
+  geom_smooth(method = "loess")
+```
+
+Do we think a linear model is appropriate here?
+
+That's not always the case though. Here's an example from a ProPublica story about redlining in car insurance.
+
+https://www.propublica.org/article/minority-neighborhoods-higher-car-insurance-premiums-methodology
+
+
+
+
+
+
+
+
